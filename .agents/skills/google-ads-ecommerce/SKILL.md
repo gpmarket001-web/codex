@@ -1,6 +1,6 @@
 ---
 name: google-ads-ecommerce
-description: Use esta skill para criar, revisar ou otimizar anuncios Google Ads, titulos, descricoes, titulos longos, criativos, prompts de imagem, assets de Demand Gen, Performance Max, Search Ads e copy de conversao para e-commerce feminino premium, especialmente moda feminina 35+/40+.
+description: Use esta skill principalmente para gerar prompts, direção criativa e briefing visual de imagens premium para anúncios Google Ads de e-commerce feminino 35+/40+.
 ---
 
 # Skill: Google Ads E-commerce Feminino Premium
