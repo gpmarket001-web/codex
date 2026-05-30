@@ -7,37 +7,61 @@ description: Use esta skill principalmente para gerar prompts, direção criativ
 
 ## Objetivo
 
-Criar anuncios Google Ads com alta chance de conversao para e-commerce feminino premium, mantendo:
+Criar prompts, direção criativa, briefing visual e ideias de imagens premium para anúncios Google Ads de e-commerce feminino 35+/40+, com mentalidade CEO de oferta, funil e melhoria continua.
 
-- Clareza
-- Desejo
-- Seguranca
-- Elegancia
-- Conforto
-- Oferta clara
-- Escassez moderada
-- Conformidade com politicas de anuncios
-- Estetica boutique
-- Comunicacao voltada para mulheres adultas, especialmente 35+/40+
+A skill deve ajudar a gerar:
+
+- Imagens editoriais premium
+- Criativos com texto minimalista
+- Criativos animados para head, hero, Demand Gen e Performance Max
+- Prompts de imagem prontos para geracao
+- Briefings visuais para designer ou IA
+- Ideias de oferta, brinde e sazonalidade
+- Copy curta para overlay, headline, selo e rodape
+- Melhorias 1,0% melhores para funil, oferta e conversao
 
 ---
 
 ## Processo obrigatorio
 
-Sempre que criar anuncio, siga esta ordem:
+Sempre que criar criativo, prompt ou anuncio visual, siga esta ordem:
 
-1. Identificar produto
-2. Identificar oferta
-3. Identificar publico
-4. Identificar principal objecao
-5. Criar angulos de copy
-6. Criar titulos curtos
-7. Criar titulos longos
-8. Criar descricoes
-9. Criar extensoes ou assets extras quando fizer sentido
-10. Sugerir direcao criativa da imagem
-11. Revisar limites de caracteres
-12. Remover promessas arriscadas
+1. Identificar produto, cor, tecido e principal beneficio visual.
+2. Identificar oferta, brinde, prazo e condicao comercial.
+3. Validar se brinde, prazo, estoque e desconto sao reais.
+4. Identificar publico: mulheres adultas 35+/40+.
+5. Identificar principal objecao: confianca, entrega, caimento, troca ou qualidade.
+6. Definir angulo principal: desejo, conforto, caimento, seguranca, oferta ou ocasiao.
+7. Criar conceito visual premium.
+8. Procurar uma novidade 1,0% melhor: sazonalidade, animacao, brinde, funil ou prova.
+9. Criar prompt de imagem sem texto.
+10. Criar prompt de imagem com texto ou animacao quando fizer sentido.
+11. Criar headlines, selos e rodapes curtos.
+12. Revisar conformidade Google Ads.
+13. Remover qualquer promessa arriscada, urgencia falsa ou excesso visual.
+
+---
+
+## Mentalidade CEO e melhoria 1,0%
+
+Antes de finalizar, sempre procurar uma melhoria concreta para a operacao:
+
+- Oferta mais clara
+- Brinde mais percebido
+- Headline mais atual
+- Animacao mais premium
+- Funil mais inteligente
+- WhatsApp mais humano
+- Pagina com menos objecao
+- Criativo com mais desejo
+- Prova social mais visivel, quando real
+- Sazonalidade com bom gosto
+
+Sempre que fizer sentido, incluir uma secao Ideia 1% Melhor com uma sugestao pratica.
+
+Exemplo de pensamento CEO:
+
+A peca pode vender mais se a campanha parecer atual. Para Festa Junina, usar uma head animada com Perfeito para Festa Junina, fundo marfim/bege, bandeirinhas minimalistas e selo discreto de brinde, mantendo o produto como protagonista.
 
 ---
 
@@ -96,6 +120,70 @@ Exemplos:
 - Oferta Por Tempo Limitado
 - Ultimas Pecas Disponiveis
 
+### Angulo 6 - Ocasiao e novidade
+
+Foco em tornar a campanha atual, cultural e memoravel sem perder o premium.
+
+Exemplos:
+
+- Perfeito Para Festa Junina
+- Look Pronto Para o Inverno
+- Brinde Especial Ate Domingo
+
+---
+
+## Formula de prompts visuais
+
+Use esta estrutura:
+
+Produto + modelo adulta + pose natural + fundo premium + luz + movimento + espaco visual + detalhe de oferta + seguranca + restricoes
+
+Modelo:
+
+Imagem editorial premium para campanha de moda feminina, modelo adulta 35+/40+, usando [produto/cor], pose natural [andando/sentada/em movimento leve], tecido com movimento suave, fundo monocromatico [marfim/bege/off-white/areia/nude/cinza claro/terracota suave], iluminacao suave de estudio, corpo inteiro quando possivel, bastante respiro visual, estetica boutique, visual limpo, produto como protagonista.
+
+---
+
+## Formula para criativo animado
+
+Use animacao apenas quando ela aumenta percepcao e clareza.
+
+Estrutura:
+
+1. Head/headline animada no topo.
+2. Produto e modelo como protagonistas.
+3. Elemento sazonal minimalista.
+4. Selo discreto de oferta ou brinde.
+5. Rodape de confianca.
+6. Loop leve e mobile-first.
+
+Exemplo aprovado para Festa Junina:
+
+- Head animada: Perfeito para Festa Junina
+- Selo discreto: Blusinha forrada de brinde ate domingo
+- Elementos: bandeirinhas minimalistas, luz quente suave, fundo marfim/bege, movimento lento
+- Rodape: Envio Seguro - Troca Facilitada
+
+Usar somente se a campanha de Festa Junina estiver ativa e o brinde/prazo forem reais.
+
+---
+
+## Prompt-base sem texto
+
+Imagem editorial premium para campanha de moda feminina, modelo adulta 35+, usando [produto/cor], pose natural caminhando, tecido em movimento suave, fundo monocromatico clean em tom marfim/bege, iluminacao suave de estudio, corpo inteiro com bastante espaco ao redor, estetica sofisticada tipo boutique, visual minimalista, elegante e sem texto.
+
+---
+
+## Prompt-base com texto
+
+Imagem editorial premium para campanha de moda feminina, modelo adulta 35+, usando [produto/cor], fundo monocromatico clean, iluminacao suave, pose natural, tecido em movimento, estetica boutique sofisticada. Adicionar texto minimalista elegante: headline curta com beneficio, subheadline pequena, selo discreto de oferta ou brinde e rodape de confianca. Manter muito espaco em branco, tipografia refinada e layout premium.
+
+---
+
+## Prompt-base com animacao de head
+
+Criativo animado premium para anuncio Google Ads de moda feminina, formato vertical 9:16 e quadrado 1:1, modelo adulta 35+/40+ usando [produto/cor], pose natural com tecido em movimento, fundo marfim/bege clean, luz suave de estudio. No topo, animacao minimalista da headline: Perfeito para Festa Junina. Adicionar bandeirinhas finas de Sao Joao com movimento leve, sem poluir. Incluir selo discreto somente se verdadeiro: Blusinha forrada de brinde ate domingo. Rodape pequeno: Envio Seguro - Troca Facilitada. Estetica boutique, premium, feminina, limpa e mobile-first.
+
 ---
 
 ## Formula de titulos curtos
@@ -106,7 +194,7 @@ Use modelos como:
 - [Beneficio] + [Estilo]
 - [Oferta] + [Escassez]
 - [Seguranca] + [Compra]
-- [Produto] + [Publico]
+- [Ocasião] + [Produto]
 
 Exemplos:
 
@@ -116,8 +204,8 @@ Exemplos:
 - Ultimas Pecas
 - Compre Com Seguranca
 - Visual Sofisticado
-- Jeans Leve e Elegante
-- Look Pronto em Segundos
+- Perfeito Para Sao Joao
+- Brinde Ate Domingo
 
 Titulos curtos devem ter ate 30 caracteres sempre que forem assets de Google Ads.
 
@@ -131,13 +219,14 @@ Use modelos como:
 - Vista-se com [beneficio emocional] e [beneficio pratico]
 - [Oferta] em peca premium com [seguranca]
 - [Produto] elegante para [publico/rotina]
+- [Ocasião] com [produto] + [beneficio] + [oferta real]
 
 Exemplos:
 
 - Macacao jeans wide leg com caimento elegante para mulheres sofisticadas
 - Vista-se com conforto, elegancia e praticidade em uma unica peca
 - Peca feminina premium com envio seguro e troca facilitada
-- Look elegante para passeios, viagens e momentos especiais
+- Look elegante para Festa Junina com toque premium e brinde real
 
 Titulos longos devem ter ate 90 caracteres.
 
@@ -149,13 +238,13 @@ Descricoes devem ter ate 90 caracteres.
 
 Use estrutura:
 
-Beneficio + Seguranca + Urgencia leve
+Beneficio + Seguranca + Oferta/urgencia leve real
 
 Exemplos:
 
 - Caimento elegante, conforto real e visual sofisticado para o dia a dia.
 - Peca premium com envio seguro, troca facilitada e atendimento dedicado.
-- Oferta por tempo limitado. Garanta sua peca antes do fim do estoque.
+- Oferta por tempo limitado. Garanta sua peca enquanto houver disponibilidade.
 - Visual moderno e confortavel para mulheres que valorizam elegancia.
 - Compre com seguranca e receba sua peca com rastreio do pedido.
 
@@ -180,6 +269,9 @@ Use e adapte:
 - Modelagem Elegante
 - Leveza e Movimento
 - Sofisticacao Diaria
+- Perfeito Para Festa Junina
+- Brinde Ate Domingo
+- Sao Joao Com Estilo
 
 ---
 
@@ -192,6 +284,7 @@ Use e adapte:
 - Visual moderno, confortavel e elegante para mulheres adultas
 - Compra segura com envio rastreado e suporte dedicado
 - Oferta especial em peca versatil para momentos casuais e elegantes
+- Look premium para Festa Junina com visual elegante e conforto real
 
 ---
 
@@ -204,6 +297,7 @@ Use e adapte:
 - Visual moderno e confortavel para mulheres que valorizam elegancia.
 - Garanta sua peca com condicao especial enquanto houver disponibilidade.
 - Compre com seguranca e receba sua peca com rastreio do pedido.
+- Brinde disponivel somente se a condicao estiver ativa e aprovada.
 
 ---
 
@@ -213,14 +307,16 @@ Nunca usar:
 
 - Promessas corporais exageradas
 - Antes e depois corporal
-- "Emagreca"
-- "Esconda sua barriga"
-- "Corpo perfeito"
-- "Afina cintura"
-- "Resultado garantido"
-- "A melhor loja do Brasil"
+- Emagreca
+- Esconda sua barriga
+- Corpo perfeito
+- Afina cintura
+- Resultado garantido
+- A melhor loja do Brasil
 - Urgencia falsa
 - Desconto falso
+- Brinde falso
+- Prazo falso
 - Afirmacoes sem prova
 
 Substituir por:
@@ -232,9 +328,10 @@ Substituir por:
 - Compra segura
 - Envio com rastreio
 - Condicao especial
-- Ultimas pecas disponiveis
+- Ultimas pecas disponiveis, quando for verdade
+- Brinde especial, quando for verdade
 
-Nunca inventar prova social, estoque, garantia, desconto, prazo, brinde ou troca. So usar quando for verdade.
+Nunca inventar prova social, estoque, garantia, desconto, prazo, brinde ou troca.
 
 ---
 
@@ -254,41 +351,14 @@ Para prompts de imagem, usar:
 - Pouco ou nenhum texto
 - Produto em destaque
 
-Prompt-base:
+Para animacao, usar:
 
-"Imagem editorial premium para campanha de moda feminina, modelo adulta 35+, usando [produto/cor], pose natural caminhando, tecido em movimento suave, fundo monocromatico clean em tom marfim/bege, iluminacao suave de estudio, corpo inteiro com bastante espaco ao redor, estetica sofisticada tipo boutique, visual minimalista, elegante e sem texto."
-
----
-
-## Criativo com texto
-
-Usar esta estrutura:
-
-Headline:
-
-"Elegancia Sem Esforco"
-
-Subheadline:
-
-"Caimento premium, conforto e sofisticacao em uma unica peca."
-
-Selo discreto:
-
-"Oferta Especial"
-
-Rodape:
-
-"Envio Seguro - Troca Facilitada"
-
-Regras:
-
-- Pouco texto
-- Fonte elegante
-- Layout limpo
-- Produto como protagonista
-- CTA discreto
-- Nada poluido
-- Nada com aparencia de panfleto
+- Movimento sutil de headline
+- Bandeirinhas minimalistas para Sao Joao/Festa Junina
+- Luz quente discreta
+- Selo pequeno de brinde/oferta
+- Loop curto, suave e mobile-first
+- Nada piscando, nada agressivo, nada poluido
 
 ---
 
@@ -316,6 +386,10 @@ Foco em condicao especial, disponibilidade e brinde quando existir.
 
 Usar somente quando houver prova real.
 
+### Grupo 6 - Sazonalidade premium
+
+Usar ocasiao atual com bom gosto, como Festa Junina, inverno ou fim de semana, sempre sem perder a estetica boutique.
+
 ---
 
 ## Estrutura para Demand Gen
@@ -330,6 +404,8 @@ Priorizar:
 - Fundo monocromatico
 - Texto curto ou nenhum texto
 - Sensacao de marca boutique
+- Microanimacao sutil quando houver video ou motion
+- Oferta visivel sem parecer panfleto
 
 Evitar:
 
@@ -337,6 +413,7 @@ Evitar:
 - Texto grande demais
 - Excesso de desconto
 - Layout de marketplace
+- Sazonalidade caricata
 
 ---
 
@@ -349,25 +426,46 @@ Criar anuncios com:
 - Seguranca
 - CTA
 - Oferta sem exagero
+- Ocasiao ou brinde real quando for relevante
 
 Exemplo de estrutura:
 
 Titulo 1: Macacao Wide Leg Feminino
-Titulo 2: Caimento Premium
+Titulo 2: Perfeito Para Festa Junina
 Titulo 3: Envio Seguro
 
 Descricao:
-"Visual elegante, conforto real e compra segura com rastreio do pedido."
+Visual elegante, conforto real e compra segura com rastreio do pedido.
 
 ---
 
 ## Saida padrao
 
-Quando o usuario pedir anuncios Google Ads, entregar neste formato:
+Quando o usuario pedir imagem, criativo ou anuncio Google Ads, entregar neste formato:
 
 ### Estrategia
 
 Resumo do angulo principal.
+
+### Ideia 1% Melhor
+
+Uma sugestao CEO para melhorar oferta, funil, criativo ou copy.
+
+### Direcao visual
+
+Descricao clara da imagem, modelo, fundo, pose, luz, produto e composicao.
+
+### Prompt de imagem
+
+Prompt pronto para geracao de imagem.
+
+### Prompt de animacao
+
+Prompt pronto para head, hero, video curto ou motion quando fizer sentido.
+
+### Textos do criativo
+
+Headline, subheadline, selo e rodape, com contagem aproximada quando for asset.
 
 ### Titulos curtos
 
@@ -381,17 +479,13 @@ Lista com 5 opcoes.
 
 Lista com 5 opcoes ate 90 caracteres.
 
-### Criativos sugeridos
-
-3 a 5 ideias de imagem ou video.
-
 ### Melhor combinacao
 
 Indicar a combinacao mais forte para teste inicial.
 
-### Observacoes
+### Observacoes de conformidade
 
-Apontar riscos, melhorias ou ajustes de politica quando necessario.
+Apontar validacoes de brinde, prazo, estoque, promessa e politica.
 
 ---
 
@@ -399,17 +493,20 @@ Apontar riscos, melhorias ou ajustes de politica quando necessario.
 
 Antes de finalizar, verificar:
 
-- O anuncio e claro?
+- O criativo parece premium?
+- O produto e protagonista?
 - O beneficio aparece rapido?
 - A oferta e entendivel?
+- Brinde, prazo e estoque foram validados?
 - Existe seguranca de compra?
-- A estetica parece premium?
-- O texto respeita limites?
-- A promessa e segura?
+- A animacao e sutil e mobile-first?
 - A linguagem conversa com mulher adulta?
+- O texto respeita limites?
+- A promessa e segura para Google Ads?
 - O anuncio nao parece golpe?
 - O CTA e direto?
 - O criativo nao esta poluido?
+- Existe pelo menos uma ideia 1,0% melhor quando fizer sentido?
 
 ---
 
@@ -419,4 +516,4 @@ O anuncio deve vender primeiro pela percepcao premium, depois pela oferta.
 
 A cliente precisa pensar:
 
-"Essa peca parece elegante, combina comigo, parece confiavel e a condicao esta boa para comprar agora."
+Essa peca parece elegante, combina comigo, parece confiavel, tem uma novidade interessante e a condicao esta boa para comprar agora.
