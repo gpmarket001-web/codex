@@ -117,6 +117,66 @@
       "imposto_estimado": 0,
       "preco_venda": 0,
       "_TODO": "Preencher custos reais e preco_venda."
+    },
+    {
+      "sku": "vlx-tech-dress-shirt",
+      "produto": "Men's Tech Stretch Dress Shirt (anti-wrinkle)",
+      "loja": "valrox",
+      "tags_campanha": [],
+      "moeda_fornecedor": "USD",
+      "custo_fornecedor_origem": 1300,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 4999,
+      "_TODO": "Valrox/USD. Custo estimado da mineracao (AliExpress) — CONFIRMAR no fornecedor. frete US a definir."
+    },
+    {
+      "sku": "vlx-performance-polo",
+      "produto": "Men's Performance Stretch Polo (anti-odor)",
+      "loja": "valrox",
+      "tags_campanha": [],
+      "moeda_fornecedor": "USD",
+      "custo_fornecedor_origem": 900,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 4499,
+      "_TODO": "Valrox/USD. Custo estimado (confirmar)."
+    },
+    {
+      "sku": "vlx-tech-chino",
+      "produto": "Men's Stretch Tech Chino (non-iron)",
+      "loja": "valrox",
+      "tags_campanha": [],
+      "moeda_fornecedor": "USD",
+      "custo_fornecedor_origem": 1500,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 5999,
+      "_TODO": "Valrox/USD. Custo estimado (confirmar)."
+    },
+    {
+      "sku": "vlx-rfid-wallet",
+      "produto": "Men's Slim RFID Minimalist Wallet",
+      "loja": "valrox",
+      "tags_campanha": [],
+      "moeda_fornecedor": "USD",
+      "custo_fornecedor_origem": 350,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 2999,
+      "_TODO": "Valrox/USD. Custo estimado (confirmar). Evergreen/presente, alta margem."
+    },
+    {
+      "sku": "vlx-comfort-sneaker",
+      "produto": "Men's Orthopedic Comfort Walking Sneaker",
+      "loja": "valrox",
+      "tags_campanha": [],
+      "moeda_fornecedor": "USD",
+      "custo_fornecedor_origem": 2200,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 5999,
+      "_TODO": "Valrox/USD. Custo estimado (confirmar). Calcado: conferir frete/devolucao."
     }
   ]
 }

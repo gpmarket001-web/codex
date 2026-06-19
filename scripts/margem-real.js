@@ -52,17 +52,19 @@ const campaigns = campaignsFile.results || campaignsFile;
 const cfg = ledger.config;
 const skuById = Object.fromEntries((ledger.skus || []).map((s) => [s.sku, s]));
 
-function fxToBRL(moeda) {
-  if (!moeda || moeda === 'BRL') return 1; // BR = fornecedor nacional, sem cambio
-  const taxa = cfg.cambio && cfg.cambio[`${moeda}_para_BRL`];
-  return typeof taxa === 'number' ? taxa : 1; // se faltar a taxa, trata como ja em BRL
+// converte de uma moeda para outra via config.cambio (chave "<DE>_para_<PARA>"). 1 se igual/ausente.
+function fxTo(fromMoeda, toMoeda) {
+  if (!fromMoeda || fromMoeda === toMoeda) return 1;
+  const t = cfg.cambio && cfg.cambio[`${fromMoeda}_para_${toMoeda}`];
+  return typeof t === 'number' ? t : 1;
 }
 
-// Custo fixo por unidade (centavos, na moeda da loja BR=BRL). Gateway/checkout NAO entram aqui
-// porque a UTMify ja os desconta em `fees`; aqui so cobrimos o buraco do COGS.
+// Custo fixo por unidade, NA MOEDA DA OPERACAO do SKU (BR=BRL, Valrox=USD). Gateway/checkout NAO
+// entram aqui porque a UTMify ja os desconta em `fees`; aqui so cobrimos o buraco do COGS.
 function cogsUnitFixed(sku) {
   if (!sku) return { valor: null, conhecido: false };
-  const fx = fxToBRL(sku.moeda_fornecedor || 'BRL');
+  const opMoeda = (ledger.operacoes[sku.loja] || {}).moeda || 'BRL';
+  const fx = fxTo(sku.moeda_fornecedor || opMoeda, opMoeda);
   const fornecedor = (sku.custo_fornecedor_origem || 0) * fx;
   const total = fornecedor + (sku.frete_unitario || 0) + (sku.imposto_estimado || 0);
   const conhecido = (sku.custo_fornecedor_origem || 0) > 0 || (sku.frete_unitario || 0) > 0;
