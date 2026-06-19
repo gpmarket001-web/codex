@@ -15,7 +15,7 @@ Portfolio de agentes/scripts da operacao. Construir na ordem das camadas. Este a
 | 2 | Fila de Mineracao | ✅ construido (foco EUA/Valrox) | `.claude/agents/mineracao.md`, `scripts/mineracao-rank.js`, `scripts/mineracao.sh`, `data/{fornecedores,ja-testados}.json`, `data/mineracao/`, `mineracao/` |
 | 3 | Diversificacao "Proximo Alenice" | ✅ construido | `.claude/agents/diversificacao.md`, `scripts/diversificacao.js`, `data/pipeline.json`, `pipeline/validacao.md` |
 | 4 | Despachante de Criativo | ⏳ backlog | — |
-| 5 | Gate Revisao Bruta | ⏳ backlog | — |
+| 5 | Gate Revisao Bruta | ✅ construido | `.claude/agents/gate-revisao.md`, `scripts/gate-revisao.js`, `data/gate/_template.json`, `gate/` |
 | 6 | Kit de Ativacao Meta | ⏳ backlog | — |
 | 7 | Sentinela Reportana | ⏳ backlog | — |
 

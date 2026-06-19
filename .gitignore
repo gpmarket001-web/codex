@@ -17,3 +17,8 @@ briefings/_cron.log
 
 # Mantidos versionados: data/cogs-ledger.json, data/utmify-campaigns-sample.json (sintetico),
 # data/toques-log.json
+
+# Gate Revisao Bruta: checklists e relatorios por pagina (template fica versionado)
+data/gate/*.json
+!data/gate/_template.json
+gate/*.md

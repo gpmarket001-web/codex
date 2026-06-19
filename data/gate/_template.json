@@ -1,0 +1,22 @@
+{
+  "_doc": "GATE REVISAO BRUTA (Agente 5) — checklist pre-gasto de uma pagina (PDP). Copie para data/gate/<slug>.json e preencha. GO so sai com TUDO verde.",
+  "_status": "verde = ok | vermelho = problema (bloqueia) | pendente = nao verificado (bloqueia ate virar verde)",
+  "produto": "",
+  "loja": "",
+  "url": "",
+  "shopify_product_id": "",
+  "verificadoEm": "",
+  "checks": [
+    { "id": "estoque-variantes", "grupo": "revisao-bruta", "label": "Estoque > 0 em TODAS as variantes", "auto": true, "status": "pendente", "detalhe": "" },
+    { "id": "reviews-reais", "grupo": "revisao-bruta", "label": "Sem metricas de review falsas/inventadas", "auto": true, "status": "pendente", "detalhe": "" },
+    { "id": "ref-produto-certo", "grupo": "revisao-bruta", "label": "Sem referencia a produto errado no texto", "auto": true, "status": "pendente", "detalhe": "" },
+    { "id": "sem-placeholder", "grupo": "revisao-bruta", "label": "Sem avatar/imagem placeholder generico", "auto": true, "status": "pendente", "detalhe": "" },
+    { "id": "trust-elements", "grupo": "revisao-bruta", "label": "Elementos de confianca presentes (selo, garantia, trust bar)", "auto": true, "status": "pendente", "detalhe": "" },
+    { "id": "funil-isolado", "grupo": "hard-check", "label": "Funil isolado", "auto": false, "status": "pendente", "detalhe": "" },
+    { "id": "oferta-validada", "grupo": "hard-check", "label": "Oferta validada", "auto": false, "status": "pendente", "detalhe": "" },
+    { "id": "breakeven-definido", "grupo": "hard-check", "label": "Breakeven definido (via Agente 0)", "auto": false, "status": "pendente", "detalhe": "" },
+    { "id": "tracking-validado", "grupo": "hard-check", "label": "Tracking validado", "auto": false, "status": "pendente", "detalhe": "" },
+    { "id": "ratios-completos", "grupo": "hard-check", "label": "Ratios completos", "auto": false, "status": "pendente", "detalhe": "" },
+    { "id": "benchmark-batido", "grupo": "hard-check", "label": "Benchmark batido", "auto": false, "status": "pendente", "detalhe": "" }
+  ]
+}
