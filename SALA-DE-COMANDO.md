@@ -11,7 +11,7 @@ Portfolio de agentes/scripts da operacao. Construir na ordem das camadas. Este a
 |---|--------|--------|------|
 | 0 | Motor de Verdade de Margem | ✅ construido | `data/cogs-ledger.json`, `scripts/margem-real.js` |
 | 1 | Comando Manha (cockpit) | ✅ construido | `.claude/agents/comando-manha.md`, `scripts/comando-manha.sh`, `scripts/protecao-pixel.js`, `scripts/trim-utmify.js` |
-| 1.5 | Dossie Vivo por Marca | ◻️ iniciado | `dossie/grassa.md` (faltam cida/valrox/bravo/liso) |
+| 1.5 | Dossie Vivo por Marca | ✅ construido | `dossie/{grassa,cida,bravo,valrox,liso}.md` (operacoes separadas) |
 | 2 | Fila de Mineracao | ⏳ backlog | — |
 | 3 | Diversificacao "Proximo Alenice" | ⏳ backlog | — |
 | 4 | Despachante de Criativo | ⏳ backlog | — |
@@ -32,7 +32,7 @@ briefings/ saida diaria do Comando Manha (AAAA-MM-DD.md)
 Conserta o COGS=0 da UTMify. A UTMify recebe `productCosts=0`, entao seu profit/roas/roi sao ficcao.
 - `data/cogs-ledger.json` — fonte da verdade de custo por SKU (CNY/USD -> moeda da loja, frete, imposto, preco_venda). **Preencher os `_TODO`.**
 - `node scripts/margem-real.js` — cruza UTMify x ledger e calcula, por campanha, ROAS real vs breakeven real, lucro 7d real (realizado e com PIX pendente). Por produto: breakeven ROAS e margem por pedido.
-- Mantem BR (UTMify/AppMax) e Valrox (Shopify/Stripe) SEPARADOS.
+- Mantem operacoes SEPARADAS: dentro do BR, tabela e subtotal por marca (Grassa/Cida/Bravo, via `resumoPorLoja`); Valrox (Shopify/Stripe, USD) cai em `campanhasOperacaoSeparada`, fora do agregado BR; Liso (SaaS) nao entra na margem de produto. Marcas nunca se misturam.
 
 > Demonstrado: com COGS realista do Alenice, o breakeven sobe de ~1.2 para ~2.0–2.6 e varias campanhas que pareciam lucrativas viram negativas. Sem o ledger preenchido, as campanhas saem marcadas `COGS?`.
 

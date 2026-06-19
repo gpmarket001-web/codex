@@ -201,6 +201,19 @@ const totalLucroBR = camposBR.reduce((s, c) => s + c.lucro7dRealizadoCentavos, 0
 const totalLucroBRComPix = camposBR.reduce((s, c) => s + c.lucro7dComPixCentavos, 0);
 const semCogs = camposBR.filter((c) => !c.cogsConhecido).length;
 
+// operacoes BR mantidas SEPARADAS por marca (Grassa/Cida/Bravo nao se misturam)
+const lojasBR = [...new Set(camposBR.map((c) => c.loja))];
+const resumoPorLoja = lojasBR.map((loja) => {
+  const lst = camposBR.filter((c) => c.loja === loja);
+  return {
+    loja,
+    campanhas: lst.length,
+    lucro7dRealizadoCentavos: lst.reduce((s, c) => s + c.lucro7dRealizadoCentavos, 0),
+    lucro7dComPixCentavos: lst.reduce((s, c) => s + c.lucro7dComPixCentavos, 0),
+    campanhasSemCogs: lst.filter((c) => !c.cogsConhecido).length,
+  };
+});
+
 const out = {
   geradoEm: new Date().toISOString(),
   janela: campaignsFile.janela || null,
@@ -211,6 +224,7 @@ const out = {
     lucro7dComPixCentavos: totalLucroBRComPix,
     campanhasSemCogs: semCogs,
   },
+  resumoPorLoja,
   campanhasBR: camposBR,
   campanhasOperacaoSeparada: campsSeparadas,
   produtosBreakeven: produtos,
@@ -232,26 +246,43 @@ console.log('\n=== MOTOR DE VERDADE DE MARGEM ===');
 console.log(`Janela: ${out.janela ? out.janela.from + ' -> ' + out.janela.to : '(ver fixture)'}`);
 console.log(`Fonte: ${out.fonteCampanhas}  |  filtro status: ${statusFilter || 'TODAS'}`);
 
-console.log('\n--- CAMPANHAS BR (UTMify/AppMax) ---');
-console.log(
-  pad('Campanha', 44) + pad('ROAS', 7) + pad('Brkeven', 8) + pad('Linha', 7) +
-    padL('Lucro7d real', 16) + padL('c/ PIX pend.', 16)
-);
-console.log('-'.repeat(98));
-for (const c of camposBR.sort((a, b) => a.lucro7dRealizadoCentavos - b.lucro7dRealizadoCentavos)) {
-  const linha = !c.cogsConhecido ? 'COGS?' : c.acimaDaLinha ? 'ACIMA' : 'ABAIXO';
+const nomeLoja = (loja) => (ledger.operacoes[loja] && ledger.operacoes[loja].loja) || loja;
+const cabecalho = () =>
   console.log(
-    pad(shortName(c.nome), 44) +
-      pad(c.realROAS != null ? c.realROAS.toFixed(2) : '-', 7) +
-      pad(c.breakevenROAS != null ? c.breakevenROAS.toFixed(2) : '-', 8) +
-      pad(linha, 7) +
-      padL(money(c.lucro7dRealizadoCentavos, c.moeda), 16) +
-      padL(money(c.lucro7dComPixCentavos, c.moeda), 16)
+    pad('Campanha', 44) + pad('ROAS', 7) + pad('Brkeven', 8) + pad('Linha', 7) +
+      padL('Lucro7d real', 16) + padL('c/ PIX pend.', 16)
+  );
+
+// uma tabela SEPARADA por marca — Grassa, Cida e Bravo nunca se misturam
+for (const loja of lojasBR) {
+  const lst = camposBR
+    .filter((c) => c.loja === loja)
+    .sort((a, b) => a.lucro7dRealizadoCentavos - b.lucro7dRealizadoCentavos);
+  console.log(`\n--- ${nomeLoja(loja).toUpperCase()} (UTMify/AppMax) ---`);
+  cabecalho();
+  console.log('-'.repeat(98));
+  for (const c of lst) {
+    const linha = !c.cogsConhecido ? 'COGS?' : c.acimaDaLinha ? 'ACIMA' : 'ABAIXO';
+    console.log(
+      pad(shortName(c.nome), 44) +
+        pad(c.realROAS != null ? c.realROAS.toFixed(2) : '-', 7) +
+        pad(c.breakevenROAS != null ? c.breakevenROAS.toFixed(2) : '-', 8) +
+        pad(linha, 7) +
+        padL(money(c.lucro7dRealizadoCentavos, c.moeda), 16) +
+        padL(money(c.lucro7dComPixCentavos, c.moeda), 16)
+    );
+  }
+  const sub = resumoPorLoja.find((r) => r.loja === loja);
+  console.log('-'.repeat(98));
+  console.log(
+    pad(`Subtotal ${nomeLoja(loja)} (${sub.campanhas} camp.)`, 65) +
+      padL(money(sub.lucro7dRealizadoCentavos, 'BRL'), 16) +
+      padL(money(sub.lucro7dComPixCentavos, 'BRL'), 16)
   );
 }
-console.log('-'.repeat(98));
+console.log('\n' + '='.repeat(98));
 console.log(
-  pad(`TOTAL BR (${camposBR.length} camp.)`, 65) +
+  pad(`TOTAL BR (${camposBR.length} camp., ${lojasBR.length} marca(s))`, 65) +
     padL(money(totalLucroBR, 'BRL'), 16) +
     padL(money(totalLucroBRComPix, 'BRL'), 16)
 );
