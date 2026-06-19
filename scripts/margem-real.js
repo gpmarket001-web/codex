@@ -53,10 +53,9 @@ const cfg = ledger.config;
 const skuById = Object.fromEntries((ledger.skus || []).map((s) => [s.sku, s]));
 
 function fxToBRL(moeda) {
-  if (moeda === 'BRL') return 1;
-  if (moeda === 'CNY') return cfg.cambio.CNY_para_BRL;
-  if (moeda === 'USD') return cfg.cambio.USD_para_BRL;
-  return 1;
+  if (!moeda || moeda === 'BRL') return 1; // BR = fornecedor nacional, sem cambio
+  const taxa = cfg.cambio && cfg.cambio[`${moeda}_para_BRL`];
+  return typeof taxa === 'number' ? taxa : 1; // se faltar a taxa, trata como ja em BRL
 }
 
 // Custo fixo por unidade (centavos, na moeda da loja BR=BRL). Gateway/checkout NAO entram aqui

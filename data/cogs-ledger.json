@@ -3,7 +3,7 @@
   "_porque_existe": "A UTMify recebe COGS=0 (campo productCosts=0 em toda campanha). Por isso profit, roas, roi e breakeven que ela mostra sao FICCAO. Este arquivo injeta o custo real para que scripts/margem-real.js calcule a verdade.",
   "_como_preencher": [
     "1. Para cada produto que voce anuncia, crie/edite uma entrada em 'skus'.",
-    "2. Custos em moeda original (CNY ou USD do fornecedor) sao convertidos por 'config.cambio'. Preencha o cambio do dia.",
+    "2. Operacao BR = fornecedor NACIONAL (direct response): preencha custo_fornecedor_origem ja em centavos de BRL e deixe moeda_fornecedor='BRL' (sem cambio). O 'config.cambio' so vale para SKU com moeda estrangeira (ex: Valrox em USD).",
     "3. 'preco_venda' = ticket medio do pedido daquele produto (em centavos, BRL para BR / USD para Valrox). Usado para breakeven por produto.",
     "4. Custos por unidade em centavos da moeda da loja (BRL para grassa/cida/bravo, USD para valrox).",
     "5. 'campanha_tags.produto' liga a tag de produto no nome da campanha (ex: ALE, CAS) a este SKU. Veja 'mapa.produto_por_tag'.",
@@ -13,10 +13,8 @@
 
   "config": {
     "cambio": {
-      "_TODO": "Atualize com o cambio do dia (quanto vale 1 unidade da moeda estrangeira na moeda da loja).",
-      "CNY_para_BRL": 0.78,
+      "_TODO": "So relevante para SKU com moeda estrangeira (Valrox/USD). Operacao BR usa fornecedor nacional em BRL, sem cambio.",
       "USD_para_BRL": 5.45,
-      "CNY_para_USD": 0.14,
       "atualizado_em": "2026-06-19"
     },
     "checkout_br": {
@@ -65,19 +63,19 @@
       "produto": "Macacao Alenice Jeans Wide Leg Premium",
       "loja": "grassa",
       "tags_campanha": ["ALE"],
-      "moeda_fornecedor": "CNY",
+      "moeda_fornecedor": "BRL",
       "custo_fornecedor_origem": 0,
       "frete_unitario": 0,
       "imposto_estimado": 0,
       "preco_venda": 0,
-      "_TODO": "PRODUTO HERO (~85% da receita). Preencha custo_fornecedor_origem (CNY), frete_unitario e preco_venda (centavos BRL = ticket medio do pedido Alenice). Tudo zerado = breakeven nao confiavel."
+      "_TODO": "PRODUTO HERO (~85% da receita). Fornecedor BR: preencha custo_fornecedor_origem (centavos BRL, custo de compra no fornecedor nacional), frete_unitario (se voce absorve o frete) e preco_venda (centavos BRL = ticket medio do pedido Alenice). Tudo zerado = breakeven nao confiavel."
     },
     {
       "sku": "casaco-la-batida",
       "produto": "Casaco Edicao Especial De La Batida + Brinde",
       "loja": "grassa",
       "tags_campanha": ["CAS"],
-      "moeda_fornecedor": "CNY",
+      "moeda_fornecedor": "BRL",
       "custo_fornecedor_origem": 0,
       "frete_unitario": 0,
       "imposto_estimado": 0,
@@ -89,7 +87,7 @@
       "produto": "Conjunto Casaquinho e Calca Luiza",
       "loja": "grassa",
       "tags_campanha": ["CONJ", "LUIZA"],
-      "moeda_fornecedor": "CNY",
+      "moeda_fornecedor": "BRL",
       "custo_fornecedor_origem": 0,
       "frete_unitario": 0,
       "imposto_estimado": 0,
@@ -101,7 +99,7 @@
       "produto": "Tenis Ortopedico Graca 2026 - Compre 1 Leve 2",
       "loja": "grassa",
       "tags_campanha": ["TENIS"],
-      "moeda_fornecedor": "CNY",
+      "moeda_fornecedor": "BRL",
       "custo_fornecedor_origem": 0,
       "frete_unitario": 0,
       "imposto_estimado": 0,
@@ -113,7 +111,7 @@
       "produto": "Macacao Bela Decote em V",
       "loja": "grassa",
       "tags_campanha": ["MBL"],
-      "moeda_fornecedor": "CNY",
+      "moeda_fornecedor": "BRL",
       "custo_fornecedor_origem": 0,
       "frete_unitario": 0,
       "imposto_estimado": 0,
