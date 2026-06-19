@@ -1,0 +1,19 @@
+{
+  "_doc": "SENTINELA REPORTANA (Agente 7) — metricas de recuperacao por fluxo, por semana. O subagente atualiza com os numeros reais; o script compara vs baseline e alerta queda.",
+  "_unidade": "taxa = recuperados / enviados. receita_recuperada em centavos BRL.",
+  "baseline_taxa": {
+    "carrinho-master": 0.18,
+    "pix": 0.22,
+    "pedido-pendente-ab": 0.15
+  },
+  "tolerancia_queda": 0.15,
+  "_nota_tolerancia": "alerta se taxa_da_semana < baseline * (1 - tolerancia_queda). Ex: baseline 0.22, tolerancia 0.15 => alerta abaixo de 0.187.",
+  "semanas": [
+    { "semana": "2026-S24", "fluxo": "carrinho-master", "enviados": 1200, "recuperados": 222, "receita_recuperada": 3990000 },
+    { "semana": "2026-S24", "fluxo": "pix", "enviados": 800, "recuperados": 184, "receita_recuperada": 3312000 },
+    { "semana": "2026-S24", "fluxo": "pedido-pendente-ab", "enviados": 600, "recuperados": 96, "receita_recuperada": 1728000 },
+    { "semana": "2026-S25", "fluxo": "carrinho-master", "enviados": 1300, "recuperados": 245, "receita_recuperada": 4410000 },
+    { "semana": "2026-S25", "fluxo": "pix", "enviados": 850, "recuperados": 128, "receita_recuperada": 2304000 },
+    { "semana": "2026-S25", "fluxo": "pedido-pendente-ab", "enviados": 620, "recuperados": 99, "receita_recuperada": 1782000 }
+  ]
+}

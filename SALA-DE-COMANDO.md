@@ -17,7 +17,7 @@ Portfolio de agentes/scripts da operacao. Construir na ordem das camadas. Este a
 | 4 | Despachante de Criativo | ⏳ backlog | — |
 | 5 | Gate Revisao Bruta | ✅ construido | `.claude/agents/gate-revisao.md`, `scripts/gate-revisao.js`, `data/gate/_template.json`, `gate/` |
 | 6 | Kit de Ativacao Meta | ⏳ backlog | — |
-| 7 | Sentinela Reportana | ⏳ backlog | — |
+| 7 | Sentinela Reportana | ✅ construido | `.claude/agents/reportana-sentinela.md`, `scripts/reportana-sentinela.js`, `data/reportana-recuperacao.json` |
 
 ## Estrutura
 ```

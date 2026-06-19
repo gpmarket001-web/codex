@@ -22,3 +22,7 @@ briefings/_cron.log
 data/gate/*.json
 !data/gate/_template.json
 gate/*.md
+
+# Sentinela Reportana: export real de fluxos + saida derivada (dados de recuperacao ficam versionados como amostra)
+data/reportana-fluxos.json
+data/reportana-sentinela-latest.json
