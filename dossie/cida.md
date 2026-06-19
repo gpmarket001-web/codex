@@ -1,25 +1,25 @@
 # Dossie Vivo — Cida
 
-> Operacao BR feminina premium (irma da Grassa). UTMify/AppMax/PIX, Google Ads.
-> Quando o operador disser "modo Cida", carregue SO este dossie. NAO misturar com Grassa/Bravo/Valrox.
+> Operacao BR feminina premium (irma da Graca). UTMify/AppMax/PIX, Google Ads. **ATIVA.**
+> Quando o operador disser "modo Cida", carregue SO este dossie. NAO misturar com Graca/Bravo/Valrox.
 
 ## Estado atual
-- Fonte de dados: UTMify (operacao BR). **A CONFIRMAR:** dashboard proprio ou compartilhado com a Grassa?
-- Tag de marca no nome da campanha: `[CID]` (mapeada em `data/cogs-ledger.json` -> mapa.loja_por_tag).
-- Moeda BRL. Gateway AppMax. Checkout BR.
+- Status: **ativa**. Uma das 2 marcas BR ativas (a outra e a Graca).
+- Fonte de dados: UTMify dashboard **`6928c5f9ae114b9a6890e049` ("Principal")** — o MESMO da Graca. Sao separadas apenas pela tag `[CID]` vs `[GRA]` no nome da campanha.
+- Moeda BRL. Gateway AppMax. Checkout BR. Fornecedor nacional (direct response).
 
 ## Hero product
-- (a definir — registrar o produto-carro-chefe da Cida)
+- (a definir — registrar o carro-chefe da Cida)
 
 ## Campanhas ativas
-- (preencher a partir do Comando Manha quando houver campanhas `[CID]` ativas)
+- (preencher a partir do Comando Manha; filtre as campanhas com tag `[CID]`)
 
 ## Pendencias
-- Confirmar se a Cida tem dashboard UTMify proprio (se sim, registrar o ID aqui e em operacoes.cida.dashboardId).
-- Preencher SKUs da Cida no ledger (custo fornecedor BR, frete, preco_venda).
+- Preencher SKUs da Cida no ledger (custo fornecedor BR em BRL, frete, preco_venda).
+- Definir hero.
 
 ## Ultima decisao
 - (registrar)
 
 ## Proxima acao
-- Confirmar fonte de dados + mapear SKUs.
+- Mapear SKUs `[CID]` no ledger.

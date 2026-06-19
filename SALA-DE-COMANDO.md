@@ -11,7 +11,7 @@ Portfolio de agentes/scripts da operacao. Construir na ordem das camadas. Este a
 |---|--------|--------|------|
 | 0 | Motor de Verdade de Margem | ✅ construido | `data/cogs-ledger.json`, `scripts/margem-real.js` |
 | 1 | Comando Manha (cockpit) | ✅ construido | `.claude/agents/comando-manha.md`, `scripts/comando-manha.sh`, `scripts/protecao-pixel.js`, `scripts/trim-utmify.js` |
-| 1.5 | Dossie Vivo por Marca | ✅ construido | `dossie/{grassa,cida,bravo,valrox,liso}.md` (operacoes separadas) |
+| 1.5 | Dossie Vivo por Marca | ✅ construido | `dossie/{grassa,cida,bravo,valrox,liso}.md` — BR ativas: Graca + Cida; Bravo OFF; Valrox (US) pausada |
 | 2 | Fila de Mineracao | ⏳ backlog | — |
 | 3 | Diversificacao "Proximo Alenice" | ⏳ backlog | — |
 | 4 | Despachante de Criativo | ⏳ backlog | — |

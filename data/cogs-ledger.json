@@ -31,10 +31,10 @@
   },
 
   "operacoes": {
-    "grassa":  { "loja": "Grassa",  "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399 },
-    "cida":    { "loja": "Cida",    "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399 },
-    "bravo":   { "loja": "Bravo",   "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399 },
-    "valrox":  { "loja": "Valrox",  "moeda": "USD", "fonte_dados": "shopify", "dashboardId": null, "gateway": "stripe", "gateway_pct": 0.029, "_nota": "OPERACAO SEPARADA: COGS real do fornecedor + Shopify/Google Ads. NAO usa UTMify/AppMax/PIX. Nao misturar com BR." },
+    "grassa":  { "loja": "Graca",  "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399, "status": "ativa", "_nota": "BR feminina. Compartilha o dashboard 'Principal' com a Cida; separadas pela tag [GRA]." },
+    "cida":    { "loja": "Cida",   "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399, "status": "ativa", "_nota": "BR feminina. Mesmo dashboard 'Principal' da Graca; separadas pela tag [CID]." },
+    "bravo":   { "loja": "Bravo",  "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399, "status": "off", "_nota": "BR masculina, atualmente DESLIGADA. Reativar -> mudar status para 'ativa'." },
+    "valrox":  { "loja": "Valrox", "moeda": "USD", "fonte_dados": "shopify", "dashboardId": null, "gateway": "stripe", "gateway_pct": 0.029, "status": "pausada", "_nota": "US masculina, PAUSADA: troca de conta de anuncios, aguardando liberacao. OPERACAO SEPARADA: COGS real do fornecedor + Shopify/Google Ads. NAO usa UTMify/AppMax/PIX. Nao misturar com BR." },
     "liso":    { "loja": "Liso",    "moeda": "BRL", "fonte_dados": "n/a",     "dashboardId": null, "gateway": null, "gateway_pct": 0, "_nota": "SaaS, fora do e-commerce. Nao entra na margem de produto." }
   },
 

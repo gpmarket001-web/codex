@@ -1,6 +1,7 @@
 # Dossie Vivo — Valrox
 
 > Operacao MASCULINA nos EUA. **TOTALMENTE SEPARADA da operacao BR.**
+> **STATUS ATUAL: PAUSADA** — troca de conta de anuncios; orientaram aguardar liberacao antes de voltar a rodar.
 > Quando o operador disser "modo Valrox", carregue SO este dossie.
 
 ## REGRA DE SEPARACAO (nao furar)

@@ -1,10 +1,11 @@
-# Dossie Vivo — Grassa
+# Dossie Vivo — Graca
 
-> Operacao BR feminina premium (UTMify/AppMax/PIX, Google Ads). Atualize a cada decisao relevante.
-> Quando o operador disser "modo Grassa", carregue SO este dossie.
+> Operacao BR feminina premium (UTMify/AppMax/PIX, Google Ads). **ATIVA.** Atualize a cada decisao relevante.
+> Quando o operador disser "modo Graca", carregue SO este dossie. (arquivo: grassa.md / chave: grassa / tag: [GRA])
 
 ## Estado atual
-- Fonte de dados: UTMify dashboard `6928c5f9ae114b9a6890e049` (Principal), moeda BRL, checkout ZedyCheckout, Google Ads (conta `9516124144`).
+- Status: **ativa**. Uma das 2 marcas BR ativas (a outra e a Cida). Bravo esta OFF; Valrox (US) pausada.
+- Fonte de dados: UTMify dashboard `6928c5f9ae114b9a6890e049` (Principal), moeda BRL, checkout ZedyCheckout, Google Ads (conta `9516124144`). Mesmo dashboard da Cida; separadas pela tag `[GRA]` vs `[CID]`.
 - Convencao de nome de campanha: `[GRA] [FORMATO] [PRODUTO] [PUBLICO] [ETAPA] [vAAMMDD]`
   - FORMATO: `DG-IMG` (Demand Gen imagem), `YT-VID` (YouTube video), `SR`/`BUSCA` (Search).
   - PRODUTO: `ALE` (Alenice), `CAS` (Casaco la batida), `CONJ`/`LUIZA`, `TENIS`, `MBL` (Bela).
