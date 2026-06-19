@@ -26,3 +26,14 @@ gate/*.md
 # Sentinela Reportana: export real de fluxos + saida derivada (dados de recuperacao ficam versionados como amostra)
 data/reportana-fluxos.json
 data/reportana-sentinela-latest.json
+
+# Criativos: midia gerada (Higgsfield) e pesada/binaria — versiona so brief/roteiro/copy
+criativos/**/*.png
+criativos/**/*.jpg
+criativos/**/*.jpeg
+criativos/**/*.webp
+criativos/**/*.mp4
+criativos/**/*.mov
+
+# Meta: saida derivada
+data/meta-ativacao-latest.json

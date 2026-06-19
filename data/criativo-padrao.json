@@ -1,0 +1,30 @@
+{
+  "_doc": "PADRAO DE PRODUCAO DE CRIATIVO validado (Agente 4 / Higgsfield). O Despachante segue isto.",
+  "imagem": {
+    "fidelidade_produto": "Nano Banana 2 (modo edicao) — para manter o produto fiel a foto da loja",
+    "lote_barato_teste": "GPT Image 2 (~0.5 cred/img) — para lote barato de variacoes de teste",
+    "fundo_default": "monocromatico alto contraste",
+    "variantes_cor_angulo": "somente na fase de otimizacao, nao no teste inicial",
+    "export": "2K comprimido — NUNCA 4K; cair para 1K se o Google reclamar de tamanho"
+  },
+  "video": {
+    "modelo": "Kling 3.0",
+    "sound": "off"
+  },
+  "narracao": {
+    "idioma": "PT-BR",
+    "estrutura": [
+      "0-4s: gancho de identidade",
+      "4-8s: nome do produto + diferencial",
+      "8-10s: end card"
+    ],
+    "obs": "narracao entra no CapCut depois (o roteiro e gerado aqui)"
+  },
+  "copy": {
+    "skill": "ecomm-copy-fashion",
+    "obs": "copy de anuncio gerada pela skill; respeitar limites de caracteres do Google (ver AGENTS.md secao 10)"
+  },
+  "custo": {
+    "aviso": "Geracao de imagem/video no Higgsfield CONSOME CREDITOS (dinheiro real). O setup local (scripts/criativo-setup.js) e gratis; a geracao so roda com OK do operador."
+  }
+}

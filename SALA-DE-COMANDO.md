@@ -14,9 +14,9 @@ Portfolio de agentes/scripts da operacao. Construir na ordem das camadas. Este a
 | 1.5 | Dossie Vivo por Marca | ✅ construido | `dossie/{grassa,cida,bravo,valrox,liso}.md` — BR ativas: Graca + Cida; Bravo OFF; Valrox (US) pausada |
 | 2 | Fila de Mineracao | ✅ construido (foco EUA/Valrox) | `.claude/agents/mineracao.md`, `scripts/mineracao-rank.js`, `scripts/mineracao.sh`, `data/{fornecedores,ja-testados}.json`, `data/mineracao/`, `mineracao/` |
 | 3 | Diversificacao "Proximo Alenice" | ✅ construido | `.claude/agents/diversificacao.md`, `scripts/diversificacao.js`, `data/pipeline.json`, `pipeline/validacao.md` |
-| 4 | Despachante de Criativo | ⏳ backlog | — |
+| 4 | Despachante de Criativo | ✅ construido (setup; geracao sob OK) | `.claude/agents/despachante-criativo.md`, `scripts/criativo-setup.js`, `data/criativo-padrao.json`, `criativos/` |
 | 5 | Gate Revisao Bruta | ✅ construido | `.claude/agents/gate-revisao.md`, `scripts/gate-revisao.js`, `data/gate/_template.json`, `gate/` |
-| 6 | Kit de Ativacao Meta | ⏳ backlog | — |
+| 6 | Kit de Ativacao Meta | ✅ construido (plano) | `.claude/agents/ativacao-meta.md`, `data/meta-ativacao.json` |
 | 7 | Sentinela Reportana | ✅ construido | `.claude/agents/reportana-sentinela.md`, `scripts/reportana-sentinela.js`, `data/reportana-recuperacao.json` |
 
 ## Estrutura
@@ -62,3 +62,21 @@ Alimenta o pipeline com demanda real validada. Operacao alvo atual: **Valrox (mo
 ```
 node scripts/mineracao-rank.js --operacao valrox
 ```
+
+## Camada 2–4 — comandos rapidos (deterministicos, gratis)
+```
+# Agente 3 — Diversificacao "Proximo Alenice" (dependencia do hero + board)
+node scripts/diversificacao.js                 # -> pipeline/validacao.md
+
+# Agente 5 — Gate Revisao Bruta (GO/NO-GO de uma pagina; exit 0=GO, 1=NO-GO)
+node scripts/gate-revisao.js --gate data/gate/<slug>.json
+
+# Agente 7 — Sentinela Reportana (queda de recuperacao vs baseline)
+node scripts/reportana-sentinela.js
+
+# Agente 4 — Despachante de Criativo (setup local; geracao no Higgsfield so com OK)
+node scripts/criativo-setup.js --produto "<nome>" --loja grassa --foto <url>
+```
+Subagentes correspondentes em `.claude/agents/`: `mineracao`, `diversificacao`, `gate-revisao`, `reportana-sentinela`, `despachante-criativo`, `ativacao-meta` (+ `comando-manha`).
+
+> Acoes que mudam algo externo (UTMify, contas de anuncio, Shopify, Reportana) ou que custam credito (Higgsfield) exigem OK do operador — nenhum agente executa sozinho.

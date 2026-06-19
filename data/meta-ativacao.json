@@ -1,0 +1,41 @@
+{
+  "_doc": "KIT DE ATIVACAO META (Agente 6) — plano zero-to-one para o canal Meta (hoje em zero). Diversificacao de canal. Plano + criterio; NAO executa nada sem o operador.",
+  "operacao_alvo": "grassa",
+  "etapas": [
+    {
+      "id": "pixel-capi",
+      "titulo": "Pixel + CAPI",
+      "status": "pendente",
+      "objetivo": "Pixel instalado e CAPI configurado e disparando (PageView, ViewContent, AddToCart, InitiateCheckout, Purchase).",
+      "checar": ["pixel presente na loja", "CAPI ativo (server-side)", "eventos chegando no Events Manager", "deduplicacao pixel x CAPI ok"]
+    },
+    {
+      "id": "publico-espelho",
+      "titulo": "Espelhar publico vencedor do Google",
+      "status": "pendente",
+      "objetivo": "Levar o padrao 45+ / Roupas sociais do Google para interesses Meta equivalentes.",
+      "checar": ["demografico 45+", "interesses equivalentes a 'roupas sociais' (NUNCA esportivas)", "evitar publicos amplos demais no teste inicial"]
+    },
+    {
+      "id": "criativos-adaptados",
+      "titulo": "Adaptar estaticos vencedores",
+      "status": "pendente",
+      "objetivo": "Pegar os estaticos que ja ganham no Google e adaptar para formatos Meta.",
+      "checar": ["feed 1:1/4:5", "stories/reels 9:16", "manter fundo mono alto contraste e produto protagonista"]
+    },
+    {
+      "id": "estrutura-campanha",
+      "titulo": "1a campanha + guarda-corpos",
+      "status": "pendente",
+      "objetivo": "Montar a 1a campanha com guarda-corpos espelhando o Pixel Protection Protocol.",
+      "checar": ["budget inicial modesto", "max +20% por ajuste", "48h entre mudancas", "72h mao fora em campanha nova", "max 2 toques/dia"]
+    },
+    {
+      "id": "criterio-validacao",
+      "titulo": "Criterio de validacao antes de escalar",
+      "status": "pendente",
+      "objetivo": "Definir o que e 'validado' antes de escalar (sem queimar verba no escuro).",
+      "checar": ["breakeven REAL definido (Agente 0)", "janela de 7 dias", "ROAS real > breakeven real", "CPA dentro do alvo"]
+    }
+  ]
+}
