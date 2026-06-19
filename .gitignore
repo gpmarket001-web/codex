@@ -1,0 +1,11 @@
+# Dados reais de runtime (gerados pelo Comando Manha) — nao versionar receita real
+data/utmify-campaigns-latest.json
+data/utmify-raw.json
+
+# Saidas derivadas dos motores (regeneradas a cada run)
+data/margem-real-latest.json
+data/protecao-pixel-latest.json
+briefings/_cron.log
+
+# Mantidos versionados: data/cogs-ledger.json, data/utmify-campaigns-sample.json (sintetico),
+# data/toques-log.json

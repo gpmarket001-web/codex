@@ -1,0 +1,124 @@
+{
+  "_doc": "MOTOR DE VERDADE DE MARGEM (Agente 0) — fonte da verdade de custo por SKU.",
+  "_porque_existe": "A UTMify recebe COGS=0 (campo productCosts=0 em toda campanha). Por isso profit, roas, roi e breakeven que ela mostra sao FICCAO. Este arquivo injeta o custo real para que scripts/margem-real.js calcule a verdade.",
+  "_como_preencher": [
+    "1. Para cada produto que voce anuncia, crie/edite uma entrada em 'skus'.",
+    "2. Custos em moeda original (CNY ou USD do fornecedor) sao convertidos por 'config.cambio'. Preencha o cambio do dia.",
+    "3. 'preco_venda' = ticket medio do pedido daquele produto (em centavos, BRL para BR / USD para Valrox). Usado para breakeven por produto.",
+    "4. Custos por unidade em centavos da moeda da loja (BRL para grassa/cida/bravo, USD para valrox).",
+    "5. 'campanha_tags.produto' liga a tag de produto no nome da campanha (ex: ALE, CAS) a este SKU. Veja 'mapa.produto_por_tag'.",
+    "6. Campos com valor null ou 0 e marcados com '_TODO' precisam do seu numero real. Enquanto null, o script mostra 'COGS?' na campanha."
+  ],
+  "_unidade": "Todos os valores monetarios em CENTAVOS, na moeda da operacao (ver operacoes[x].moeda). Ex: R$ 89,90 = 8990.",
+
+  "config": {
+    "cambio": {
+      "_TODO": "Atualize com o cambio do dia (quanto vale 1 unidade da moeda estrangeira na moeda da loja).",
+      "CNY_para_BRL": 0.78,
+      "USD_para_BRL": 5.45,
+      "CNY_para_USD": 0.14,
+      "atualizado_em": "2026-06-19"
+    },
+    "checkout_br": {
+      "_doc": "Custo do checkout para operacao BR (ZedyCheckout/AppMax): % da receita + mensalidade rateada por pedido.",
+      "percentual_receita": 0.02,
+      "mensalidade_centavos": 12700,
+      "pedidos_mes_estimados": 0,
+      "_nota_rateio": "rateio_por_pedido = mensalidade_centavos / pedidos_mes_estimados. Preencha pedidos_mes_estimados (>0) para ativar o rateio; se 0, o rateio e ignorado."
+    },
+    "pix": {
+      "_doc": "Taxa de aprovacao historica do PIX pendente. Usada no cenario 'com PIX pendente' para nao superestimar receita.",
+      "taxa_aprovacao_estimada": 0.55
+    }
+  },
+
+  "operacoes": {
+    "grassa":  { "loja": "Grassa",  "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399 },
+    "cida":    { "loja": "Cida",    "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399 },
+    "bravo":   { "loja": "Bravo",   "moeda": "BRL", "fonte_dados": "utmify",  "dashboardId": "6928c5f9ae114b9a6890e049", "gateway": "appmax", "gateway_pct": 0.0399 },
+    "valrox":  { "loja": "Valrox",  "moeda": "USD", "fonte_dados": "shopify", "dashboardId": null, "gateway": "stripe", "gateway_pct": 0.029, "_nota": "OPERACAO SEPARADA: COGS real do fornecedor + Shopify/Google Ads. NAO usa UTMify/AppMax/PIX. Nao misturar com BR." },
+    "liso":    { "loja": "Liso",    "moeda": "BRL", "fonte_dados": "n/a",     "dashboardId": null, "gateway": null, "gateway_pct": 0, "_nota": "SaaS, fora do e-commerce. Nao entra na margem de produto." }
+  },
+
+  "mapa": {
+    "_doc": "Resolve o nome da campanha (com tags entre colchetes) para loja e produto. A 1a tag costuma ser a loja; outra tag identifica o produto.",
+    "loja_por_tag": {
+      "GRA": "grassa",
+      "CID": "cida",
+      "BRV": "bravo",
+      "VLX": "valrox"
+    },
+    "loja_default": "grassa",
+    "produto_por_tag": {
+      "ALE": "macacao-alenice",
+      "CAS": "casaco-la-batida",
+      "CONJ": "conjunto-luiza",
+      "TENIS": "tenis-graca",
+      "MBL": "macacao-bela",
+      "LUIZA": "conjunto-luiza"
+    }
+  },
+
+  "skus": [
+    {
+      "sku": "macacao-alenice",
+      "produto": "Macacao Alenice Jeans Wide Leg Premium",
+      "loja": "grassa",
+      "tags_campanha": ["ALE"],
+      "moeda_fornecedor": "CNY",
+      "custo_fornecedor_origem": 0,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 0,
+      "_TODO": "PRODUTO HERO (~85% da receita). Preencha custo_fornecedor_origem (CNY), frete_unitario e preco_venda (centavos BRL = ticket medio do pedido Alenice). Tudo zerado = breakeven nao confiavel."
+    },
+    {
+      "sku": "casaco-la-batida",
+      "produto": "Casaco Edicao Especial De La Batida + Brinde",
+      "loja": "grassa",
+      "tags_campanha": ["CAS"],
+      "moeda_fornecedor": "CNY",
+      "custo_fornecedor_origem": 0,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 0,
+      "_TODO": "Preencher custos reais e preco_venda."
+    },
+    {
+      "sku": "conjunto-luiza",
+      "produto": "Conjunto Casaquinho e Calca Luiza",
+      "loja": "grassa",
+      "tags_campanha": ["CONJ", "LUIZA"],
+      "moeda_fornecedor": "CNY",
+      "custo_fornecedor_origem": 0,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 0,
+      "_TODO": "Preencher custos reais e preco_venda."
+    },
+    {
+      "sku": "tenis-graca",
+      "produto": "Tenis Ortopedico Graca 2026 - Compre 1 Leve 2",
+      "loja": "grassa",
+      "tags_campanha": ["TENIS"],
+      "moeda_fornecedor": "CNY",
+      "custo_fornecedor_origem": 0,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 0,
+      "_TODO": "Kit 2 pares: lembre que o custo_fornecedor_origem deve cobrir as 2 unidades enviadas."
+    },
+    {
+      "sku": "macacao-bela",
+      "produto": "Macacao Bela Decote em V",
+      "loja": "grassa",
+      "tags_campanha": ["MBL"],
+      "moeda_fornecedor": "CNY",
+      "custo_fornecedor_origem": 0,
+      "frete_unitario": 0,
+      "imposto_estimado": 0,
+      "preco_venda": 0,
+      "_TODO": "Preencher custos reais e preco_venda."
+    }
+  ]
+}
