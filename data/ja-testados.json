@@ -1,0 +1,14 @@
+{
+  "_doc": "Memoria de produtos JA TESTADOS, por operacao. A Fila de Mineracao (Agente 2) de-duplica contra esta lista para nunca recomendar o que voce ja rodou.",
+  "_como_preencher": "Adicione uma entrada sempre que testar um produto. 'match' e usado para casar com o nome do candidato (substring, case-insensitive). 'resultado': validado | morto | inconclusivo.",
+  "testados": [
+    {
+      "operacao": "valrox",
+      "produto": "EXEMPLO - Tactical Cargo Pants",
+      "match": "cargo pants",
+      "resultado": "morto",
+      "data": "2026-05-10",
+      "notas": "Exemplo. Remova/edite. CPA alto, sem margem no preco testado."
+    }
+  ]
+}

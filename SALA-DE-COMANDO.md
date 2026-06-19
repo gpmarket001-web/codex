@@ -12,7 +12,7 @@ Portfolio de agentes/scripts da operacao. Construir na ordem das camadas. Este a
 | 0 | Motor de Verdade de Margem | ✅ construido | `data/cogs-ledger.json`, `scripts/margem-real.js` |
 | 1 | Comando Manha (cockpit) | ✅ construido | `.claude/agents/comando-manha.md`, `scripts/comando-manha.sh`, `scripts/protecao-pixel.js`, `scripts/trim-utmify.js` |
 | 1.5 | Dossie Vivo por Marca | ✅ construido | `dossie/{grassa,cida,bravo,valrox,liso}.md` — BR ativas: Graca + Cida; Bravo OFF; Valrox (US) pausada |
-| 2 | Fila de Mineracao | ⏳ backlog | — |
+| 2 | Fila de Mineracao | ✅ construido (foco EUA/Valrox) | `.claude/agents/mineracao.md`, `scripts/mineracao-rank.js`, `scripts/mineracao.sh`, `data/{fornecedores,ja-testados}.json`, `data/mineracao/`, `mineracao/` |
 | 3 | Diversificacao "Proximo Alenice" | ⏳ backlog | — |
 | 4 | Despachante de Criativo | ⏳ backlog | — |
 | 5 | Gate Revisao Bruta | ⏳ backlog | — |
@@ -50,3 +50,15 @@ node scripts/margem-real.js
 node scripts/protecao-pixel.js
 ```
 Para dados frescos: o subagente `comando-manha` puxa a UTMify e roda `scripts/trim-utmify.js` para atualizar `data/utmify-campaigns-latest.json`.
+
+## Agente 2 — Fila de Mineracao (foco EUA/Valrox)
+Alimenta o pipeline com demanda real validada. Operacao alvo atual: **Valrox (moda masculina US)** — separada da BR.
+- `node scripts/mineracao-rank.js --operacao valrox` — ranqueia candidatos por longevidade do anuncio (30+ dias = sinal de lucro), de-duplica contra `data/ja-testados.json`, cruza com `data/fornecedores.json` (SeaRyle / Tres Cliques / AliExpress) e estima breakeven via Agente 0 (USD/Stripe, sem PIX). Saida: `mineracao/AAAA-Sxx.md`.
+- `.claude/agents/mineracao.md` — subagente que coleta candidatos (skill ecomm-mining-engine + Google Ads Transparency MCP quando houver; senao WebSearch/WebFetch no Transparency Center + AliExpress) e grava `data/mineracao/candidatos-eua.json`.
+- `scripts/mineracao.sh` — wrapper headless semanal. Cron: `0 7 * * 1 cd <repo> && ./scripts/mineracao.sh >> mineracao/_cron.log 2>&1`
+- `data/ja-testados.json` — memoria de dedup; atualize quando testar um produto.
+
+### Rodar agora (amostra sintetica de candidatos US)
+```
+node scripts/mineracao-rank.js --operacao valrox
+```

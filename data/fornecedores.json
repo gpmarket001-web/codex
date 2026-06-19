@@ -1,0 +1,33 @@
+{
+  "_doc": "Pool de fornecedores para cruzar com produtos vencedores na mineracao (Agente 2). O cruzamento de custo NAO e automatico: a mineracao anexa onde procurar; voce/o agente confirma origem + custo real (ex: via WebFetch ao link do fornecedor).",
+  "_uso": "Cada candidato em data/mineracao/candidatos-*.json pode referenciar um fornecedor por 'fornecedor_id' e trazer 'custo_estimado' (centavos na moeda da operacao). Sem custo, o script marca 'custo?' e nao calcula breakeven.",
+  "fornecedores": [
+    {
+      "id": "searyle",
+      "nome": "SeaRyle",
+      "tipo": "fornecedor/agente",
+      "nichos": ["moda masculina", "moda feminina", "acessorios"],
+      "regioes_atende": ["BR", "US"],
+      "notas": "Agente de sourcing. Bom para validar origem e custo de peças de vestuário. Confirmar MOQ e prazo p/ US.",
+      "link": ""
+    },
+    {
+      "id": "tres-cliques",
+      "nome": "Tres Cliques",
+      "tipo": "fornecedor nacional BR",
+      "nichos": ["moda feminina", "moda masculina"],
+      "regioes_atende": ["BR"],
+      "notas": "Fornecedor nacional (direct response BR). Para Valrox/US normalmente NAO se aplica (foco BR).",
+      "link": ""
+    },
+    {
+      "id": "aliexpress",
+      "nome": "AliExpress",
+      "tipo": "marketplace import",
+      "nichos": ["geral", "moda masculina", "acessorios", "relogios"],
+      "regioes_atende": ["US", "global"],
+      "notas": "Baseline de custo e origem para produtos importados. Para US (Valrox) considerar prazo de entrega e opcao de fulfillment (agente/3PL).",
+      "link": "https://www.aliexpress.com"
+    }
+  ]
+}

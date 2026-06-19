@@ -1,0 +1,67 @@
+{
+  "_fixture": "AMOSTRA SINTETICA (dados ficticios) de candidatos da mineracao US/Valrox para o ranqueador rodar out-of-the-box. O subagente 'mineracao' gera o arquivo real candidatos-eua.json. Precos/custos em centavos USD.",
+  "operacao": "valrox",
+  "coletadoEm": "2026-06-19",
+  "candidatos": [
+    {
+      "produto": "Men's Tech Stretch Dress Shirt (anti-wrinkle)",
+      "concorrente": "competitor-a.com",
+      "primeiro_visto": "2026-03-01",
+      "ultimo_visto": "2026-06-18",
+      "ainda_ativo": true,
+      "link_anuncio": "",
+      "link_produto": "",
+      "categoria": "men-fashion",
+      "preco_visto": 4999,
+      "fornecedor_id": "aliexpress",
+      "custo_estimado": 1400,
+      "angulo": "Camisa social que nao amassa — caimento + conforto para trabalho/viagem",
+      "notas": "Forte longevidade; equivalente ao 'Elastech' do BR."
+    },
+    {
+      "produto": "Men's Orthopedic Walking Sneaker",
+      "concorrente": "competitor-b.com",
+      "primeiro_visto": "2026-05-20",
+      "ultimo_visto": "2026-06-17",
+      "ainda_ativo": true,
+      "link_anuncio": "",
+      "link_produto": "",
+      "categoria": "men-footwear",
+      "preco_visto": 5999,
+      "fornecedor_id": "aliexpress",
+      "custo_estimado": 2200,
+      "angulo": "Conforto ortopedico para o dia todo (publico 45+)",
+      "notas": "Longevidade media; conferir saturacao."
+    },
+    {
+      "produto": "Tactical Cargo Pants RipStop",
+      "concorrente": "competitor-c.com",
+      "primeiro_visto": "2026-06-01",
+      "ultimo_visto": "2026-06-15",
+      "ainda_ativo": true,
+      "link_anuncio": "",
+      "link_produto": "",
+      "categoria": "men-fashion",
+      "preco_visto": 4499,
+      "fornecedor_id": "aliexpress",
+      "custo_estimado": 1600,
+      "angulo": "Calca cargo militar resistente",
+      "notas": "JA TESTADO no BR/Valrox (ver ja-testados) — deve cair no dedup."
+    },
+    {
+      "produto": "Minimalist Leather Watch",
+      "concorrente": "competitor-d.com",
+      "primeiro_visto": "2026-06-10",
+      "ultimo_visto": "2026-06-18",
+      "ainda_ativo": true,
+      "link_anuncio": "",
+      "link_produto": "",
+      "categoria": "accessories",
+      "preco_visto": 3999,
+      "fornecedor_id": "aliexpress",
+      "custo_estimado": null,
+      "angulo": "Relogio minimalista presente",
+      "notas": "Custo a confirmar — sem custo o breakeven nao e calculado."
+    }
+  ]
+}
