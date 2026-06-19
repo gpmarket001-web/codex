@@ -1,0 +1,24 @@
+{
+  "_doc": "PIPELINE 'PROXIMO ALENICE' (Agente 3). Plantel de produtos para reduzir a dependencia do hero. Operacao BR (Graca). Atualize o status a cada decisao.",
+  "_status_legenda": "candidato -> em-teste -> validado -> escalando -> morto",
+  "operacao": "grassa",
+  "hero_sku": "macacao-alenice",
+  "meta": "Construir 3 a 5 produtos com volume relevante para o hero (Alenice) cair abaixo de 50% da receita.",
+  "framework_teste": {
+    "_doc": "Framework validado (ecomm-creative-engine) para testar um candidato novo.",
+    "criativo_default": "estatico, fundo monocromatico escuro, alto contraste",
+    "verba_dia_centavos_min": 7000,
+    "verba_dia_centavos_max": 10000,
+    "mao_fora_horas": 72,
+    "publico_vencedor": "45+ demografico + Roupas sociais",
+    "publico_evitar": "Roupas esportivas",
+    "variantes_cor_angulo": "somente na fase de otimizacao, nao no teste inicial"
+  },
+  "produtos": [
+    { "sku": "macacao-alenice", "produto": "Macacao Alenice Jeans Wide Leg Premium", "status": "escalando", "origem": "hero atual", "notas": "Carro-chefe. Objetivo: reduzir sua fatia da receita sem derrubar volume.", "atualizado_em": "2026-06-19" },
+    { "sku": "casaco-la-batida", "produto": "Casaco Edicao Especial De La Batida + Brinde", "status": "em-teste", "origem": "catalogo", "notas": "Sazonal inverno; ja tem campanhas [CAS] ativas.", "atualizado_em": "2026-06-19" },
+    { "sku": "macacao-bela", "produto": "Macacao Bela Decote em V", "status": "em-teste", "origem": "catalogo", "notas": "Campanha [MBL] ativa.", "atualizado_em": "2026-06-19" },
+    { "sku": "conjunto-luiza", "produto": "Conjunto Casaquinho e Calca Luiza", "status": "candidato", "origem": "catalogo", "notas": "Aguardando teste no framework.", "atualizado_em": "2026-06-19" },
+    { "sku": "tenis-graca", "produto": "Tenis Ortopedico Graca 2026 - Compre 1 Leve 2", "status": "candidato", "origem": "catalogo", "notas": "Kit 2 pares; conferir custo do par no ledger.", "atualizado_em": "2026-06-19" }
+  ]
+}

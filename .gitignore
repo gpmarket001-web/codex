@@ -7,6 +7,9 @@ data/mineracao/candidatos-eua.json
 data/mineracao/rank-latest.json
 mineracao/_cron.log
 
+# Diversificacao: saida derivada (o board pipeline/validacao.md fica versionado)
+data/pipeline-latest.json
+
 # Saidas derivadas dos motores (regeneradas a cada run)
 data/margem-real-latest.json
 data/protecao-pixel-latest.json

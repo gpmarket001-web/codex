@@ -13,7 +13,7 @@ Portfolio de agentes/scripts da operacao. Construir na ordem das camadas. Este a
 | 1 | Comando Manha (cockpit) | ✅ construido | `.claude/agents/comando-manha.md`, `scripts/comando-manha.sh`, `scripts/protecao-pixel.js`, `scripts/trim-utmify.js` |
 | 1.5 | Dossie Vivo por Marca | ✅ construido | `dossie/{grassa,cida,bravo,valrox,liso}.md` — BR ativas: Graca + Cida; Bravo OFF; Valrox (US) pausada |
 | 2 | Fila de Mineracao | ✅ construido (foco EUA/Valrox) | `.claude/agents/mineracao.md`, `scripts/mineracao-rank.js`, `scripts/mineracao.sh`, `data/{fornecedores,ja-testados}.json`, `data/mineracao/`, `mineracao/` |
-| 3 | Diversificacao "Proximo Alenice" | ⏳ backlog | — |
+| 3 | Diversificacao "Proximo Alenice" | ✅ construido | `.claude/agents/diversificacao.md`, `scripts/diversificacao.js`, `data/pipeline.json`, `pipeline/validacao.md` |
 | 4 | Despachante de Criativo | ⏳ backlog | — |
 | 5 | Gate Revisao Bruta | ⏳ backlog | — |
 | 6 | Kit de Ativacao Meta | ⏳ backlog | — |
