@@ -17,19 +17,21 @@ Import nativo: **Shopify Admin → Produtos → Importar → enviar o CSV** (nã
 - `Variant Compare At Price` = preço **DE** (riscado) · `Variant Price` = preço **POR** (âncora).
 - Estoque inicial: 50 por tamanho (`Variant Inventory Qty`) — ajuste conforme o real.
 
-## ⚠️ Imagens — o único passo manual antes do import
-A coluna `Image Src` está com placeholder:
-`REPLACE-WITH-CDN-URL/<handle>-<angulo>-4k.jpg` (ângulos: `hero`, `silhueta`, `macro`, `ugc`).
+## Imagens — já preenchidas
+A coluna `Image Src` já vem com as **URLs reais do Higgsfield** (Nano Banana 2, 2K) — 4 ângulos
+por produto, centralizadas em `alenice-images.json`. São links CloudFront públicos, então o
+import nativo já puxa as imagens (não precisa hospedar à parte).
 
-Shopify só importa imagem por **URL pública**. Dois caminhos:
-
-1. **Recomendado:** gere os 4 ângulos no Higgsfield (4K) → hospede (CDN próprio, ou suba na
-   Shopify e copie a URL do arquivo) → substitua cada placeholder pela URL real → importe.
-2. **Atalho:** apague o conteúdo das células `Image Src` → importe só o texto/variantes →
-   anexe as imagens manualmente na página de cada produto depois.
-
-> Mapa de posição já definido: img1 = Hero 3/4 · img2 = Silhueta · img3 = Macro · img4 = UGC.
+> Mapa de posição: img1 = Hero · img2 = Silhueta · img3 = Macro · img4 = UGC.
 > Ordem casada com o `BRIEFING-CRIATIVO-ALENICE.md`.
+
+### ⚠️ Validar antes de publicar os 3 novos
+- **Jeans:** imagens geradas a partir da **sua foto real** ✓ — pronto pra `active`.
+- **Peluciado / Linho / Manga Longa:** as imagens vieram de uma **referência sintetizada**
+  (a busca de foto real na web foi bloqueada no ambiente). São fiéis ao DNA Alenice, mas
+  **não são o SKU exato do fornecedor**. Por isso entram `draft`: antes de publicar, bata a
+  peça com o fornecedor real (DSers/AliExpress/SeaRyle) e, se divergir, regenere com a foto
+  certa. Os links CloudFront são temporários — para produção, baixe os 4K e hospede no seu CDN.
 
 ## Regenerar o CSV
 `python3 scripts/build_csv.py` (script-fonte). Edite preços, tamanhos, cópia ou estoque lá

@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Gera o CSV nativo de import da Shopify BR para a Linha Alenice (4 produtos)."""
-import csv
+import csv, json, os
 
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SIZES = ["P", "M", "G", "GG", "XG"]
 ANGLES = ["hero", "silhueta", "macro", "ugc"]  # 4 angulos -> 4 imagens
+
+with open(os.path.join(REPO, "alenice-images.json"), encoding="utf-8") as _f:
+    IMAGES = json.load(_f)
 
 # Colunas padrao do import nativo da Shopify
 COLUMNS = [
@@ -162,7 +166,8 @@ for p in PRODUCTS:
         # imagens: 1 por linha enquanto houver angulos (4 imagens, 5 variantes)
         if i < len(ANGLES):
             angle = ANGLES[i]
-            r["Image Src"] = f"REPLACE-WITH-CDN-URL/{p['handle']}-{angle}-4k.jpg"
+            url = IMAGES.get(p["handle"], {}).get(angle, "")
+            r["Image Src"] = url or f"REPLACE-WITH-CDN-URL/{p['handle']}-{angle}-4k.jpg"
             r["Image Position"] = str(i + 1)
             r["Image Alt Text"] = f"{p['alt']} - {angle}"
         rows.append(r)

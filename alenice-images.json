@@ -1,0 +1,28 @@
+{
+  "_comment": "URLs dos 4 angulos por produto geradas no Higgsfield (Nano Banana 2, 2K). Jeans = foto real do cliente; demais = referencia sintetizada (validar com SKU do fornecedor antes de publicar).",
+  "_base": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/",
+  "macacao-jeans-alenice": {
+    "hero": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_225448_8e4efb06-5acf-435a-a1f9-4799a7a20a81.png",
+    "silhueta": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_225450_a6683354-aec2-49f6-96a4-769995e58d60.png",
+    "macro": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_225454_6b47171b-c1cf-4033-b885-8d769fec6a52.png",
+    "ugc": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_225456_ad31d6c7-189a-4f5b-80a6-4964018aaaa0.png"
+  },
+  "macacao-alenice-peluciado": {
+    "hero": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230453_c7aad54d-7e38-4616-902b-9c55dcedf64a.png",
+    "silhueta": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230718_dbab9e35-7038-45f8-a7a4-756476611f01.png",
+    "macro": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230721_dbbf1f4d-3473-484f-ad76-1ac2060fda04.png",
+    "ugc": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230724_42831265-be4e-4604-8ec2-1a7a6f450608.png"
+  },
+  "macacao-alenice-linho": {
+    "hero": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230457_8b1539a6-e22e-4a40-a027-80351ebda19d.png",
+    "silhueta": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230726_0feaa31b-bfed-413a-8eb8-2849284f8035.png",
+    "macro": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230731_912e1216-d85b-4e55-a016-6aad4cb552fd.png",
+    "ugc": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230732_87eba5e7-83c0-49fd-a445-40150f221b45.png"
+  },
+  "macacao-alenice-manga-longa": {
+    "hero": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230458_21b9b5f7-7201-4289-969f-bcea85c75b9e.png",
+    "silhueta": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230734_b7e0c679-e89c-4216-a974-c62e8323c466.png",
+    "macro": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230735_84a41114-f2a2-42fe-9fa4-25fb210794a9.png",
+    "ugc": "https://d8j0ntlcm91z4.cloudfront.net/user_3DvBuVyaQF6eFuIuujdOuyQi8sn/hf_20260622_230737_5084083b-6878-41e6-9d9f-7b1c10b14bb0.png"
+  }
+}
