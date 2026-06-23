@@ -523,3 +523,37 @@ O anuncio deve vender primeiro pela percepcao premium e depois pela oferta.
 A cliente precisa pensar:
 
 Essa peca parece elegante, combina comigo, parece confiavel, tem uma novidade interessante e a condicao esta boa para comprar agora.
+
+---
+
+## 20. Protocolo de geracao de VIDEO (anti-torra de saldo) — OBRIGATORIO
+
+Video e o item que mais queima credito. Regra fixa: NUNCA disparar lote de video as cegas.
+Toda vez que o usuario pedir video, aplicar as melhores skills e a maxima otimizacao de custo.
+
+### Antes de gerar (sempre, nesta ordem)
+1. **Escolher o melhor modelo pro caso:** chamar `models_explore(action='recommend')` com o
+   input real. Para anuncio de produto/pessoa: preferir `marketing_studio_video` (feito pra
+   ad) ou `seedance_2_0` (preserva identidade/rosto) antes de `kling3_0`. Kling cru a partir
+   de still ruim DERRETE rosto, maos e o caimento da peca — foi o que deu errado.
+2. **Start frame validado:** usar SEMPRE um hero limpo e aprovado (modelo vestindo a peca,
+   fiel a foto real), NUNCA um packshot cru nem referencia sintetizada. A referencia e
+   sempre o PRODUTO ORIGINAL.
+3. **Preflight de custo:** chamar `get_cost: true` antes de qualquer geracao paga.
+4. **Modo barato no teste:** `sound: off` sempre (mais barato). Modo `std` no teste.
+   `pro`/`4k` e `upscale_video` SO depois que houver vencedor aprovado.
+
+### Como rodar (economia de credito)
+- **1 clipe de teste primeiro.** Revisar com o usuario. So depois gerar as outras variacoes.
+- **Nunca** gerar 3-4 videos de uma vez sem o usuario aprovar o primeiro.
+- **QA antes de escalar gasto:** usar `virality_predictor` pra pontuar o teste; so sobe pra
+  `pro`/`4k` e pra mais variacoes o que passou.
+- Se o usuario reclamar do resultado, PARAR de gerar, diagnosticar a causa e so voltar a
+  gastar depois do ok — nunca insistir queimando saldo.
+
+### Checklist rapido antes de apertar gerar video
+- [ ] models_explore(recommend) feito e modelo certo escolhido
+- [ ] start frame = hero validado do produto original (nao packshot/sintetico)
+- [ ] get_cost conferido e dito ao usuario
+- [ ] 1 teste em std + sound off (nao lote)
+- [ ] virality_predictor / aprovacao antes de pro/4k e antes de mais variacoes
