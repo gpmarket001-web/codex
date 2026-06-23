@@ -1,0 +1,1175 @@
+{%- comment -%}
+  ============================================================
+  ROLETA ESTRATÉGICA v11.0 — ARRAIÁ DA GRAÇA (Clean Premium+)
+  ============================================================
+  • MOTOR v8/v9/v10 INTACTO: gatilhos, UTMify, last-chance, captura
+    de lead, storage, pesos de prêmio, social proof, timer.
+    NENHUMA lógica de funil foi alterada.
+
+  • RESKIN CLEAN PREMIUM (mantido da v10):
+    - Cormorant Garamond (display) + Jost (UI)
+    - Paleta arraiá dessaturada (brasa · dourado · linho)
+    - Bandeirinhas finas em 3 tons · emoji mínimo · ícones SVG
+    - Tokens de cor no topo (.gr-roleta) → retematizar em 6 linhas
+    - prefers-reduced-motion respeitado
+
+  • NOVIDADES v11 (cirúrgicas, marcadas com [v11] — fáceis de reverter):
+    1. [v11] CORREÇÃO DE TIMING reduced-motion: resultado aparece quando
+       a roda realmente para (2.4s) e não com 2.5s de tela morta.
+       Tempo de giro centralizado em SPIN_MS.
+    2. [v11] ACESSIBILIDADE DE FOCO: trap de Tab dentro do modal, foco
+       inicial no primeiro campo e devolução do foco ao fechar.
+    3. [v11] SCROLL-LOCK iOS de verdade (position:fixed + restauração),
+       o fundo não rola mais atrás do popup no Safari mobile.
+    4. [v11] aria-label nos inputs + anel de foco dourado visível
+       (navegação por teclado premium).
+    5. [v11] Altura do modal com dvh (barra do Safari não corta o botão).
+
+  UTMify (igual v8/v9/v10): toda venda chega com
+    utm_source=roleta · utm_medium=popup · utm_campaign=<trigger>
+    utm_content=<cupom> · utm_term=<device>
+  ============================================================
+{%- endcomment -%}
+
+{%- if section.settings.enabled -%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============ TOKENS — troque aqui pra retematizar (Grassa/Cida) ============ */
+  .gr-roleta {
+    --gr-ground-1:#faf5ec; --gr-ground-2:#f0e6d2;
+    --gr-ink:#2b1d12; --gr-ink-soft:#7c6a58;
+    --gr-brasa:#b3522d; --gr-brasa-deep:#8a3a1c; --gr-brasa-soft:#cf7a4a;
+    --gr-gold:#bfa05f; --gr-gold-lt:#e3cf9f; --gr-gold-dp:#9a7d3d;
+    --gr-line:#e6d8bd; --gr-cream:#fffdf7; --gr-green:#4a7a52;
+    --gr-serif:'Cormorant Garamond', Georgia, serif;
+    --gr-sans:'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  .gr-roleta * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  /* [v11] anel de foco dourado visível só para teclado (premium a11y) */
+  .gr-roleta button:focus-visible,
+  .gr-roleta input:focus-visible {
+    outline: 2px solid var(--gr-gold-dp); outline-offset: 3px; border-radius: 4px;
+  }
+
+  .gr-roleta-overlay {
+    position: fixed; inset: 0;
+    background: rgba(22, 14, 8, 0.84);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    z-index: 999998; display: none;
+    align-items: center; justify-content: center;
+    opacity: 0; transition: opacity .45s ease; padding: 18px;
+  }
+  .gr-roleta-overlay.is-open { display: flex; opacity: 1; }
+
+  .gr-roleta-modal {
+    position: relative; width: 100%; max-width: 432px;
+    background: linear-gradient(180deg, var(--gr-ground-1), var(--gr-ground-2));
+    border-radius: 4px;
+    box-shadow: 0 40px 110px rgba(0,0,0,.45);
+    padding: 58px 30px 36px; text-align: center;
+    transform: translateY(22px) scale(.97); opacity: 0;
+    transition: transform .55s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
+    font-family: var(--gr-sans);
+    color: var(--gr-ink); overflow: hidden;
+    max-height: 96vh; max-height: 96dvh; /* [v11] dvh: Safari mobile não corta o botão */
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--gr-line);
+  }
+  .gr-roleta-overlay.is-open .gr-roleta-modal { transform: translateY(0) scale(1); opacity: 1; }
+  /* fio fino dourado no topo (substitui o xadrez gritante) */
+  .gr-roleta-modal::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 3;
+    background: linear-gradient(90deg, var(--gr-brasa), var(--gr-gold) 50%, var(--gr-brasa));
+  }
+  /* textura de linho discreta */
+  .gr-roleta-modal::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35; z-index: 0;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(166,133,72,.04) 0 2px, transparent 2px 5px),
+      repeating-linear-gradient(-45deg, rgba(166,133,72,.03) 0 2px, transparent 2px 5px);
+  }
+
+  /* BANDEIRINHAS — finas, 3 tons, fio sutil */
+  .gr-flags { position: absolute; top: 8px; left: 0; right: 0; height: 30px; z-index: 4;
+    display: flex; justify-content: space-around; align-items: flex-start; pointer-events: none; padding: 0 14px; }
+  .gr-flag { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent;
+    border-top: 14px solid var(--c); transform-origin: top center; position: relative;
+    animation: grSway 3.4s ease-in-out infinite; filter: drop-shadow(0 1px 1px rgba(0,0,0,.08)); opacity: .9; }
+  .gr-flag::before { content: ""; position: absolute; top: -2px; left: -14px; right: -14px; height: 1px; background: var(--gr-gold-dp); opacity: .35; z-index: -1; }
+  .gr-flag:nth-child(odd) { animation-delay: .5s; }
+  @keyframes grSway { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+
+  .gr-arraia { font-family: var(--gr-sans); font-size: 10px; font-weight: 500; color: var(--gr-brasa); letter-spacing: .34em; text-transform: uppercase; margin: 4px 0 10px; position: relative; z-index: 5; }
+  .gr-eyebrow { font-family: var(--gr-sans); font-size: 10px; letter-spacing: .32em; text-transform: uppercase; color: var(--gr-ink-soft); margin-bottom: 10px; font-weight: 500; position: relative; z-index: 5; }
+  .gr-title { font-family: var(--gr-serif); font-size: 34px; font-weight: 500; line-height: 1.1; color: var(--gr-ink); margin-bottom: 8px; letter-spacing: -.005em; position: relative; z-index: 5; }
+  .gr-title b { color: var(--gr-brasa); font-weight: 600; }
+  .gr-subtitle { font-family: var(--gr-sans); font-size: 15px; font-weight: 400; color: var(--gr-ink-soft); line-height: 1.55; margin-bottom: 20px; max-width: 320px; margin-left: auto; margin-right: auto; position: relative; z-index: 5; }
+
+  .gr-lead-form { display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 0 auto 20px; position: relative; z-index: 5; }
+  .gr-lead-form input {
+    width: 100%; padding: 14px 16px; border: 1px solid var(--gr-line); border-radius: 3px;
+    font-size: 16px; color: var(--gr-ink); font-family: var(--gr-sans); background: var(--gr-cream);
+    transition: border-color .2s ease, box-shadow .2s ease; -webkit-appearance: none; appearance: none;
+  }
+  .gr-lead-form input::placeholder { color: #b3a38f; }
+  .gr-lead-form input:focus { outline: none; border-color: var(--gr-gold); box-shadow: 0 0 0 3px rgba(191,160,95,.14); background: #fff; }
+  .gr-lead-form input.error { border-color: #b00020; background: #fff5f5; }
+
+  .gr-wheel-wrap { position: relative; width: 300px; height: 300px; margin: 0 auto 6px; z-index: 5; }
+  @media (min-width: 480px) { .gr-wheel-wrap { width: 328px; height: 328px; } }
+
+  /* FOGUEIRA atrás da roleta — brilho suave */
+  .gr-fogo { position: absolute; inset: -14px; border-radius: 50%; z-index: 0;
+    background: radial-gradient(circle, rgba(207,122,74,.28), transparent 64%); animation: grFlick 2.6s ease-in-out infinite; }
+  @keyframes grFlick { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: .85; transform: scale(1.04); } }
+
+  .gr-wheel-pointer { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 26px; height: 34px; z-index: 6; filter: drop-shadow(0 3px 5px rgba(0,0,0,.35)); }
+
+  .gr-wheel-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 84px; height: 84px; border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #3a2418, #1f140f); color: var(--gr-gold-lt);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    font-family: var(--gr-sans); font-size: 10px; letter-spacing: .26em; font-weight: 600; z-index: 6;
+    box-shadow: 0 6px 22px rgba(0,0,0,.4), inset 0 0 0 1.5px var(--gr-gold), inset 0 2px 4px rgba(255,255,255,.1);
+    text-transform: uppercase; cursor: pointer; border: none;
+    animation: grCenterPulse 2s ease-in-out infinite; transition: transform .15s ease;
+  }
+  .gr-wheel-center .gr-hat { display: flex; align-items: center; justify-content: center; }
+  .gr-wheel-center .gr-hat svg { width: 18px; height: 18px; }
+  .gr-wheel-center::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; border: 1px solid rgba(191,160,95,.4); pointer-events: none; }
+  .gr-wheel-center:active { transform: translate(-50%, -50%) scale(.95); }
+  .gr-wheel-center.is-spinning { animation: none; cursor: not-allowed; opacity: .92; }
+  @keyframes grCenterPulse {
+    0%, 100% { box-shadow: 0 6px 22px rgba(0,0,0,.4), inset 0 0 0 1.5px var(--gr-gold), inset 0 2px 4px rgba(255,255,255,.1), 0 0 0 0 rgba(207,122,74,.45); }
+    50% { box-shadow: 0 6px 22px rgba(0,0,0,.4), inset 0 0 0 1.5px var(--gr-gold), inset 0 2px 4px rgba(255,255,255,.1), 0 0 0 12px rgba(207,122,74,0); }
+  }
+
+  .gr-wheel { width: 100%; height: 100%; position: relative; z-index: 3; transition: transform 4.8s cubic-bezier(.17,.67,.16,1); filter: drop-shadow(0 12px 28px rgba(0,0,0,.2)); }
+  .gr-wheel-text { font-family: var(--gr-sans); font-weight: 600; letter-spacing: .08em; }
+
+  .gr-close { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border: none; background: transparent; cursor: pointer; color: #b09a78; display: flex; align-items: center; justify-content: center; border-radius: 50%; z-index: 10; transition: color .2s ease; }
+  .gr-close:hover { color: var(--gr-ink); }
+  .gr-close:active { background: rgba(0,0,0,.04); }
+  .gr-close svg { width: 17px; height: 17px; }
+
+  .gr-hint { margin-top: 10px; font-family: var(--gr-sans); font-size: 10px; color: var(--gr-ink-soft); letter-spacing: .2em; text-transform: uppercase; font-weight: 500; position: relative; z-index: 5; animation: grHintBlink 2.4s ease-in-out infinite; }
+  @keyframes grHintBlink { 0%, 100% { opacity: .85; } 50% { opacity: .4; } }
+
+  .gr-screen { display: none; }
+  .gr-screen.is-active { display: block; animation: grFadeUp .5s ease both; }
+  @keyframes grFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .gr-result-stage { position: relative; padding: 8px 0 4px; margin-bottom: 10px; z-index: 5; }
+  .gr-flash { position: absolute; top: 50%; left: 50%; width: 200px; height: 200px; transform: translate(-50%, -50%) scale(0);
+    background: radial-gradient(circle, rgba(227,207,159,.85) 0%, rgba(191,160,95,.35) 40%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 1; animation: grFlashBurst 1.2s ease-out forwards; }
+  @keyframes grFlashBurst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 50% { transform: translate(-50%, -50%) scale(1.4); opacity: .8; } 100% { transform: translate(-50%, -50%) scale(2); opacity: 0; } }
+
+  .gr-result-icon {
+    position: relative; z-index: 2; width: 80px; height: 80px; margin: 0 auto 18px; border-radius: 50%;
+    background: linear-gradient(140deg, var(--gr-gold-lt) 0%, var(--gr-gold) 52%, var(--gr-gold-dp) 100%);
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    box-shadow: 0 8px 24px rgba(191,160,95,.4), inset 0 2px 4px rgba(255,255,255,.3), 0 0 0 4px rgba(191,160,95,.12);
+    animation: grIconWin 1.2s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .gr-result-icon svg { width: 36px; height: 36px; position: relative; z-index: 1; }
+  @keyframes grIconWin { 0% { transform: scale(0) rotate(-300deg); opacity: 0; } 55% { transform: scale(1.2) rotate(-12deg); opacity: 1; } 78% { transform: scale(.96) rotate(6deg); } 100% { transform: scale(1) rotate(0); } }
+
+  .gr-result-title { font-family: var(--gr-serif); font-size: 40px; font-weight: 500; color: var(--gr-ink); margin-bottom: 6px; line-height: 1.05; position: relative; z-index: 5; animation: grTitleZoom .8s cubic-bezier(.34,1.56,.64,1) .3s both; }
+  @keyframes grTitleZoom { 0% { transform: scale(.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .gr-result-prize { font-family: var(--gr-sans); font-size: 15px; font-weight: 400; color: var(--gr-ink-soft); margin-bottom: 18px; line-height: 1.45; max-width: 300px; margin-left: auto; margin-right: auto; position: relative; z-index: 5; animation: grFadeUp .5s ease .6s both; }
+
+  .gr-coupon { border: 1px dashed var(--gr-gold); background: linear-gradient(135deg, #fbf5e7 0%, #f2e7cf 100%); padding: 20px 16px; margin: 18px auto; max-width: 300px; border-radius: 4px; position: relative; overflow: hidden; z-index: 5; animation: grFadeUp .5s ease .8s both; }
+  .gr-coupon::before, .gr-coupon::after { content: ""; position: absolute; width: 16px; height: 16px; background: var(--gr-ground-1); border-radius: 50%; top: 50%; transform: translateY(-50%); }
+  .gr-coupon::before { left: -8px; } .gr-coupon::after { right: -8px; }
+  .gr-coupon-label { font-family: var(--gr-sans); font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: var(--gr-brasa); margin-bottom: 8px; font-weight: 600; }
+  .gr-coupon-code { font-family: "Courier New", monospace; font-size: 22px; font-weight: 700; color: var(--gr-ink); letter-spacing: .16em; margin-bottom: 6px; word-break: break-all; }
+  .gr-coupon-min { font-family: var(--gr-sans); font-size: 11px; color: #8a7a6c; }
+
+  .gr-social-proof { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 12px auto 0; max-width: 300px; padding: 8px 14px; background: rgba(74,122,82,.08); border-radius: 30px; font-family: var(--gr-sans); font-size: 11px; color: var(--gr-green); font-weight: 500; position: relative; z-index: 5; animation: grFadeUp .5s ease 1.4s both; }
+  .gr-social-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gr-green); animation: grPulseGreen 1.4s ease infinite; }
+  @keyframes grPulseGreen { 0%, 100% { box-shadow: 0 0 0 0 rgba(74,122,82,.5); } 50% { box-shadow: 0 0 0 5px rgba(74,122,82,0); } }
+
+  .gr-timer { margin: 16px auto 20px; max-width: 300px; padding: 11px; background: #f6edd9; border: 1px solid var(--gr-line); border-radius: 3px; font-family: var(--gr-sans); font-size: 12px; color: var(--gr-ink-soft); position: relative; z-index: 5; animation: grFadeUp .5s ease 1s both; }
+  .gr-timer strong { font-family: "Courier New", monospace; color: var(--gr-brasa); font-size: 15px; letter-spacing: .05em; }
+  .gr-timer.expired strong { color: #b00020; }
+
+  .gr-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--gr-brasa-soft) 0%, var(--gr-brasa) 55%, var(--gr-brasa-deep) 100%);
+    color: #fff; border: none; padding: 17px 32px; min-height: 54px; width: 100%; max-width: 300px;
+    font-family: var(--gr-sans); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; cursor: pointer; border-radius: 3px;
+    transition: transform .15s ease, box-shadow .2s ease; text-decoration: none; position: relative; overflow: hidden; z-index: 5;
+    box-shadow: 0 6px 18px rgba(181,83,46,.32); animation: grFadeUp .5s ease 1.2s both, grBtnPulse 2.6s ease-in-out 1.6s infinite;
+  }
+  .gr-btn::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,.22) 50%, transparent 65%); transform: translateX(-100%); animation: grBtnShine 3.4s ease infinite; pointer-events: none; }
+  @keyframes grBtnShine { 0%, 65% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+  @keyframes grBtnPulse { 0%, 100% { box-shadow: 0 6px 18px rgba(181,83,46,.32); } 50% { box-shadow: 0 6px 22px rgba(181,83,46,.55); } }
+  .gr-btn:active { transform: scale(.98); }
+  .gr-btn:disabled { background: #b8a890; cursor: not-allowed; animation: none; box-shadow: none; }
+  .gr-btn:disabled::after { display: none; }
+
+  .gr-gift .gr-result-icon { background: linear-gradient(140deg, #8a9663 0%, #5e6b3f 100%); box-shadow: 0 8px 24px rgba(0,0,0,.2), inset 0 0 0 1.5px var(--gr-gold); }
+  .gr-gift-badge { display: inline-block; background: #1f140f; color: var(--gr-gold); font-family: var(--gr-sans); font-size: 9px; letter-spacing: .3em; text-transform: uppercase; padding: 7px 16px; border-radius: 30px; margin-bottom: 14px; font-weight: 500; border: 1px solid var(--gr-gold); position: relative; z-index: 5; animation: grFadeUp .5s ease .1s both; }
+
+  .gr-confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 999999; overflow: hidden; }
+  .gr-confetti-shape { position: absolute; will-change: transform, opacity; opacity: 0; line-height: 1; }
+  .gr-confetti-shape.fall { top: -40px; animation: grConfettiFall var(--dur, 4s) linear forwards; }
+  @keyframes grConfettiFall { 0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); } 5% { opacity: 1; } 100% { opacity: 0; transform: translate3d(var(--dx, 0px), 110vh, 0) rotate(var(--rot, 720deg)); } }
+  .gr-confetti-shape.fall.sway { animation: grConfettiFallSway var(--dur, 4s) linear forwards; }
+  @keyframes grConfettiFallSway { 0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); } 5% { opacity: 1; } 25% { transform: translate3d(40px, 25vh, 0) rotate(180deg); } 50% { transform: translate3d(-40px, 50vh, 0) rotate(360deg); } 75% { transform: translate3d(40px, 75vh, 0) rotate(540deg); } 100% { opacity: 0; transform: translate3d(0, 110vh, 0) rotate(720deg); } }
+  .gr-confetti-shape.burst { top: 50%; left: 50%; animation: grConfettiBurst 1.6s cubic-bezier(.2, .6, .35, 1) forwards; }
+  @keyframes grConfettiBurst { 0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg) scale(0.3); } 20% { transform: translate(-50%, -50%) scale(1) rotate(90deg); } 100% { opacity: 0; transform: translate(calc(-50% + var(--bx, 0px)), calc(-50% + var(--by, 0px))) rotate(var(--br, 360deg)) scale(1); } }
+  .gr-cf-flag { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 11px solid var(--c); }
+  .gr-cf-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+
+  .gr-teaser { position: fixed; bottom: 18px; left: 18px; background: linear-gradient(135deg, #1f140f, #3a2418); color: #fff; padding: 12px 20px; border-radius: 30px; font-family: var(--gr-sans); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; cursor: pointer; z-index: 999990; box-shadow: 0 8px 24px rgba(0,0,0,.28); display: none; align-items: center; gap: 9px; border: 1px solid var(--gr-gold); animation: grTeaserIn .5s ease; }
+  .gr-teaser.is-visible { display: inline-flex; }
+  .gr-teaser:active { transform: scale(.95); }
+  .gr-teaser-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gr-brasa-soft); animation: grPulse 1.6s ease infinite; }
+  @keyframes grPulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+  @keyframes grTeaserIn { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* ============ ACESSIBILIDADE: respeita quem pede menos movimento ============ */
+  @media (prefers-reduced-motion: reduce) {
+    .gr-flag, .gr-fogo, .gr-wheel-center, .gr-hint, .gr-btn, .gr-btn::after,
+    .gr-social-dot, .gr-teaser-dot, .gr-result-icon, .gr-result-title { animation: none !important; }
+    .gr-wheel { transition: transform 2.4s ease-out; } /* [v11] casa com SPIN_MS reduzido no JS */
+    .gr-roleta-overlay, .gr-roleta-modal { transition: opacity .2s ease; }
+  }
+
+  @media (max-width: 420px) {
+    .gr-roleta-modal { padding: 52px 22px 26px; }
+    .gr-title { font-size: 30px; }
+    .gr-result-title { font-size: 34px; }
+    .gr-coupon-code { font-size: 20px; }
+  }
+</style>
+
+<div class="gr-roleta" id="gr-root">
+  <div class="gr-roleta-overlay" id="gr-overlay" role="dialog" aria-modal="true" aria-labelledby="gr-title">
+    <div class="gr-roleta-modal">
+
+      <div class="gr-flags" aria-hidden="true">
+        <span class="gr-flag" style="--c:#b3522d"></span><span class="gr-flag" style="--c:#bfa05f"></span>
+        <span class="gr-flag" style="--c:#efe2c8"></span><span class="gr-flag" style="--c:#b3522d"></span>
+        <span class="gr-flag" style="--c:#bfa05f"></span><span class="gr-flag" style="--c:#efe2c8"></span>
+        <span class="gr-flag" style="--c:#b3522d"></span><span class="gr-flag" style="--c:#bfa05f"></span>
+        <span class="gr-flag" style="--c:#efe2c8"></span><span class="gr-flag" style="--c:#b3522d"></span>
+      </div>
+
+      <button class="gr-close" id="gr-close" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="gr-screen is-active" id="gr-spin-screen">
+        <div class="gr-arraia">É tempo de festa</div>
+        <div class="gr-eyebrow" id="gr-eyebrow">{{ section.settings.eyebrow_text | default: 'Arraiá da Graça' }}</div>
+        <h2 class="gr-title" id="gr-title">{{ section.settings.title | default: 'Gire a roleta do São João' }}</h2>
+        <p class="gr-subtitle" id="gr-subtitle">{{ section.settings.subtitle | default: 'Deixe seu contato e toque na fogueira para girar. A festa tem oferta pra você.' }}</p>
+
+        {%- if section.settings.capture_lead -%}
+        <div class="gr-lead-form" id="gr-lead-form">
+          <input type="email" id="gr-email" placeholder="Seu melhor e-mail" aria-label="Seu melhor e-mail" autocomplete="email" inputmode="email" required />
+          {%- if section.settings.capture_whatsapp -%}
+          <input type="tel" id="gr-phone" placeholder="WhatsApp (com DDD)" aria-label="Seu WhatsApp com DDD" autocomplete="tel" inputmode="tel" />
+          {%- endif -%}
+        </div>
+        {%- endif -%}
+
+        <div class="gr-wheel-wrap">
+          <div class="gr-fogo" aria-hidden="true"></div>
+          <svg class="gr-wheel-pointer" viewBox="0 0 28 36" aria-hidden="true">
+            <defs><linearGradient id="pointerGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e3cf9f"/><stop offset="60%" stop-color="#bfa05f"/><stop offset="100%" stop-color="#9a7d3d"/></linearGradient></defs>
+            <path d="M 14 36 L 2 8 Q 14 0 26 8 Z" fill="url(#pointerGrad)" stroke="#6b4f2e" stroke-width="0.5"/>
+            <circle cx="14" cy="10" r="3.5" fill="#1f140f" stroke="#bfa05f" stroke-width="0.8"/>
+          </svg>
+
+          <svg class="gr-wheel" id="gr-wheel" viewBox="0 0 220 220" aria-hidden="true">
+            <defs>
+              <radialGradient id="goldFill" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#e3cf9f"/><stop offset="100%" stop-color="#c4a76a"/></radialGradient>
+              <radialGradient id="creamFill" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#fbf5e7"/><stop offset="100%" stop-color="#ece0c6"/></radialGradient>
+              <radialGradient id="brickFill" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#c4703f"/><stop offset="100%" stop-color="#a23f1d"/></radialGradient>
+              <radialGradient id="sageFill" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#94a06b"/><stop offset="100%" stop-color="#6b774a"/></radialGradient>
+              <radialGradient id="plumFill" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#90506a"/><stop offset="100%" stop-color="#693047"/></radialGradient>
+              <radialGradient id="ringGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e3cf9f"/><stop offset="50%" stop-color="#bfa05f"/><stop offset="100%" stop-color="#8b6f3a"/></radialGradient>
+            </defs>
+            <circle cx="110" cy="110" r="108" fill="url(#ringGrad)"/>
+            <circle cx="110" cy="110" r="100" fill="#fff"/>
+            <g fill="#fff" stroke="#8b6f3a" stroke-width="0.6">
+              <circle cx="110" cy="6" r="2"/><circle cx="162" cy="20" r="2"/><circle cx="200" cy="58" r="2"/>
+              <circle cx="214" cy="110" r="2"/><circle cx="200" cy="162" r="2"/><circle cx="162" cy="200" r="2"/>
+              <circle cx="110" cy="214" r="2"/><circle cx="58" cy="200" r="2"/><circle cx="20" cy="162" r="2"/>
+              <circle cx="6" cy="110" r="2"/><circle cx="20" cy="58" r="2"/><circle cx="58" cy="20" r="2"/>
+            </g>
+            <!-- seg0=10% · seg1=5% · seg2=15% · seg3=BRINDE · seg4=20%  (mapeamento do motor mantido) -->
+            <path d="M 110 110 L 51.22 29.10 A 100 100 0 0 1 168.78 29.10 Z" fill="url(#goldFill)"/>
+            <path d="M 110 110 L 168.78 29.10 A 100 100 0 0 1 205.11 140.90 Z" fill="url(#creamFill)"/>
+            <path d="M 110 110 L 205.11 140.90 A 100 100 0 0 1 110 210 Z" fill="url(#brickFill)"/>
+            <path d="M 110 110 L 110 210 A 100 100 0 0 1 14.89 140.90 Z" fill="url(#sageFill)"/>
+            <path d="M 110 110 L 14.89 140.90 A 100 100 0 0 1 51.22 29.10 Z" fill="url(#plumFill)"/>
+            <g stroke="#8b6f3a" stroke-width="0.9" opacity="0.4">
+              <line x1="110" y1="110" x2="168.78" y2="29.10"/>
+              <line x1="110" y1="110" x2="205.11" y2="140.90"/><line x1="110" y1="110" x2="110" y2="210"/>
+              <line x1="110" y1="110" x2="14.89" y2="140.90"/><line x1="110" y1="110" x2="51.22" y2="29.10"/>
+            </g>
+            <g transform="rotate(0 110 110)"><text x="110" y="35" text-anchor="middle" class="gr-wheel-text" fill="#5a3a1c" style="font-size:13px">10% OFF</text></g>
+            <g transform="rotate(72 110 110)"><text x="110" y="35" text-anchor="middle" class="gr-wheel-text" fill="#5a3a1c" style="font-size:13px">5% OFF</text></g>
+            <g transform="rotate(144 110 110)"><text x="110" y="35" text-anchor="middle" class="gr-wheel-text" fill="#fff" style="font-size:13px">15% OFF</text></g>
+            <g transform="rotate(216 110 110)"><text x="110" y="35" text-anchor="middle" class="gr-wheel-text" fill="#fff" style="font-size:12px">BRINDE</text></g>
+            <g transform="rotate(288 110 110)"><text x="110" y="35" text-anchor="middle" class="gr-wheel-text" fill="#fff" style="font-size:13px">20% OFF</text></g>
+            <circle cx="110" cy="110" r="100" fill="none" stroke="#1f140f" stroke-width="1.2"/>
+            <circle cx="110" cy="110" r="108" fill="none" stroke="#8b6f3a" stroke-width="0.8"/>
+          </svg>
+          <button class="gr-wheel-center" id="gr-spin-btn" aria-label="Girar a roleta">
+            <span class="gr-hat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.5 3 4.5 4.2 4.5 8.5a4.5 4.5 0 0 1-9 0c0-1.6 1-2.8 1.7-3.4.2 1.2 1 1.9 1.6 2C11 8.5 10 6 12 3z"/></svg></span>GIRAR</button>
+        </div>
+        <div class="gr-hint" id="gr-hint">Toque na fogueira para girar</div>
+      </div>
+
+      <div class="gr-screen" id="gr-result-screen">
+        <div class="gr-result-stage">
+          <div class="gr-flash" aria-hidden="true"></div>
+          <div class="gr-result-icon" id="gr-result-icon" aria-hidden="true"></div>
+        </div>
+        <h3 class="gr-result-title" id="gr-result-title" aria-live="polite">Caiu no Arraiá</h3>
+        <p class="gr-result-prize" id="gr-result-prize">Você desbloqueou um desconto da festa</p>
+        <div class="gr-coupon">
+          <div class="gr-coupon-label">Seu cupom do São João</div>
+          <div class="gr-coupon-code" id="gr-coupon-code">XXXXXX</div>
+          <div class="gr-coupon-min" id="gr-coupon-min"></div>
+        </div>
+        <div class="gr-social-proof"><span class="gr-social-dot"></span><span id="gr-social-text">18 pessoas resgataram no arraiá hoje</span></div>
+        <div class="gr-timer" id="gr-timer">Válido por <strong id="gr-timer-display">15:00</strong> — antes da fogueira apagar</div>
+        <button class="gr-btn" id="gr-claim-btn">Copiar e aproveitar agora</button>
+      </div>
+
+      <div class="gr-screen gr-gift" id="gr-lastchance-screen">
+        <div class="gr-gift-badge">Última Chance</div>
+        <div class="gr-result-stage">
+          <div class="gr-flash" aria-hidden="true"></div>
+          <div class="gr-result-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="8.5" width="18" height="12.5" rx="1"/><path d="M3 12.5h18M12 8.5V21"/><path d="M12 8.5S10.2 4 7.8 4.8 9 8.5 12 8.5zM12 8.5s1.8-4.5 4.2-3.7S15 8.5 12 8.5z"/></svg></div>
+        </div>
+        <h3 class="gr-result-title">Brinde do Arraiá</h3>
+        <p class="gr-result-prize">Não vá embora da festa. Garantimos um brinde junino se finalizar agora.</p>
+        <div class="gr-coupon">
+          <div class="gr-coupon-label">Seu Brinde</div>
+          <div class="gr-coupon-code" id="gr-lc-code">XXXXXX</div>
+          <div class="gr-coupon-min" id="gr-lc-min"></div>
+        </div>
+        <div class="gr-timer">Expira em <strong id="gr-lc-timer">10:00</strong></div>
+        <button class="gr-btn" id="gr-lc-claim">Quero meu brinde</button>
+      </div>
+    </div>
+  </div>
+  <button class="gr-teaser" id="gr-teaser" aria-label="Abrir oferta">
+    <span class="gr-teaser-dot"></span>
+    <span>{{ section.settings.teaser_text | default: 'Seu arraiá te espera' }}</span>
+  </button>
+</div>
+<div class="gr-confetti-wrap" id="gr-confetti-wrap" aria-hidden="true"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  var CFG = {
+    homeDelay: {{ section.settings.home_delay | default: 3 }} * 1000,
+    productDelay: {{ section.settings.product_delay | default: 60 }} * 1000,
+    couponMinutes: {{ section.settings.coupon_minutes | default: 15 }},
+    captureLead: {% if section.settings.capture_lead %}true{% else %}false{% endif %},
+    musicEnabled: {% if section.settings.music_enabled %}true{% else %}false{% endif %},
+    isHome: {% if template == 'index' %}true{% else %}false{% endif %},
+    isProduct: {% if template contains 'product' %}true{% else %}false{% endif %},
+    isCheckout: {% if template contains 'cart' or template contains 'checkout' %}true{% else %}false{% endif %},
+    redirectUrl: {{ section.settings.redirect_url | default: '/collections/all' | json }},
+    socialProofMin: {{ section.settings.social_proof_min | default: 8 }},
+    socialProofMax: {{ section.settings.social_proof_max | default: 24 }},
+    coupons: {
+      d5:   { code: {{ section.settings.code_5    | default: 'FOGUEIRA5'    | json }}, min: {{ section.settings.min_5    | default: 0 }} },
+      d10:  { code: {{ section.settings.code_10   | default: 'ARRAIA10'     | json }}, min: {{ section.settings.min_10   | default: 0 }} },
+      d15:  { code: {{ section.settings.code_15   | default: 'SAOJOAO15'    | json }}, min: {{ section.settings.min_15   | default: 0 }} },
+      d20:  { code: {{ section.settings.code_20   | default: 'QUADRILHA20'  | json }}, min: {{ section.settings.min_20   | default: 0 }} },
+      gift: { code: {{ section.settings.code_gift | default: 'BRINDEJUNINO' | json }}, min: {{ section.settings.min_gift | default: 0 }} }
+    },
+    giftText: {{ section.settings.gift_text | default: 'Brinde junino garantido no seu pedido' | json }}
+  };
+
+  var KEYS = {
+    closed: 'gr_closed', coupon: 'gr_coupon', couponExp: 'gr_coupon_exp',
+    leadEmail: 'gr_lead_email', leadPhone: 'gr_lead_phone',
+    sessionShown: 'gr_session_shown', lastChanceShown: 'gr_lastchance_shown',
+    firstSpin: 'gr_first_spin_done', soundEnabled: 'gr_sound_enabled'
+  };
+
+  // ÍCONES DE RESULTADO (SVG editorial — substitui emoji)
+  var SVG_SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3.5M12 17.5V21M3 12h3.5M17.5 12H21M5.6 5.6l2.5 2.5M15.9 15.9l2.5 2.5M18.4 5.6l-2.5 2.5M8.1 15.9l-2.5 2.5"/><circle cx="12" cy="12" r="2.3"/></svg>';
+  var SVG_GIFT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="8.5" width="18" height="12.5" rx="1"/><path d="M3 12.5h18M12 8.5V21"/><path d="M12 8.5S10.2 4 7.8 4.8 9 8.5 12 8.5zM12 8.5s1.8-4.5 4.2-3.7S15 8.5 12 8.5z"/></svg>';
+
+  if (CFG.isCheckout) return;
+
+  var prefersReducedMotion = false;
+  try { prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+  // [v11] tempo de giro centralizado — casa com a transição CSS (4.8s normal / 2.4s reduzido)
+  var SPIN_MS = prefersReducedMotion ? 2400 : 4800;
+
+  function ls(k, v) {
+    try {
+      if (v === undefined) return localStorage.getItem(k);
+      if (v === null) { localStorage.removeItem(k); return; }
+      localStorage.setItem(k, v);
+    } catch (e) {}
+  }
+  function ss(k, v) {
+    try {
+      if (v === undefined) return sessionStorage.getItem(k);
+      if (v === null) { sessionStorage.removeItem(k); return; }
+      sessionStorage.setItem(k, v);
+    } catch (e) {}
+  }
+
+  function getDevice() {
+    return /Mobi|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop';
+  }
+
+  function buildUtmifyParams(coupon, trigger) {
+    return {
+      utm_source: 'roleta',
+      utm_medium: 'popup',
+      utm_campaign: trigger || 'unknown',
+      utm_content: coupon || 'no_coupon',
+      utm_term: getDevice()
+    };
+  }
+  function buildUtmString(coupon, trigger) {
+    var utms = buildUtmifyParams(coupon, trigger);
+    return Object.keys(utms).map(function(k) { return k + '=' + encodeURIComponent(utms[k]); }).join('&');
+  }
+
+  function track(name, data) {
+    try {
+      if (typeof gtag === 'function') gtag('event', name, data || {});
+      if (typeof fbq === 'function') {
+        if (name === 'roleta_lead_captured') fbq('track', 'Lead', { content_name: 'roleta' });
+        fbq('trackCustom', name, data || {});
+      }
+      if (window.dataLayer) window.dataLayer.push(Object.assign({ event: name }, data || {}));
+    } catch (e) {}
+  }
+
+  var overlay = document.getElementById('gr-overlay');
+  if (!overlay) return;
+
+  var modal = overlay.querySelector('.gr-roleta-modal'); // [v11] referência p/ trap de foco
+
+  var closeBtn = document.getElementById('gr-close');
+  var spinBtn = document.getElementById('gr-spin-btn');
+  var wheel = document.getElementById('gr-wheel');
+  var spinScreen = document.getElementById('gr-spin-screen');
+  var resultScreen = document.getElementById('gr-result-screen');
+  var lastChanceScreen = document.getElementById('gr-lastchance-screen');
+  var resultTitle = document.getElementById('gr-result-title');
+  var resultPrize = document.getElementById('gr-result-prize');
+  var couponCode = document.getElementById('gr-coupon-code');
+  var couponMin = document.getElementById('gr-coupon-min');
+  var claimBtn = document.getElementById('gr-claim-btn');
+  var lcCode = document.getElementById('gr-lc-code');
+  var lcMin = document.getElementById('gr-lc-min');
+  var lcClaim = document.getElementById('gr-lc-claim');
+  var lcTimer = document.getElementById('gr-lc-timer');
+  var timerDisplay = document.getElementById('gr-timer-display');
+  var timerWrap = document.getElementById('gr-timer');
+  var resultIcon = document.getElementById('gr-result-icon');
+  var teaser = document.getElementById('gr-teaser');
+  var eyebrow = document.getElementById('gr-eyebrow');
+  var subtitle = document.getElementById('gr-subtitle');
+  var emailInput = document.getElementById('gr-email');
+  var phoneInput = document.getElementById('gr-phone');
+  var confettiWrap = document.getElementById('gr-confetti-wrap');
+  var hint = document.getElementById('gr-hint');
+  var socialText = document.getElementById('gr-social-text');
+
+  var hasOpened = false;
+  var hasSpun = false;
+  var timerInterval = null;
+  var lcInterval = null;
+  var triggerSource = 'unknown';
+  var currentCoupon = null;
+  var soundEnabled = CFG.musicEnabled; // controlado pelo schema (sem toggle no popup — UI limpa)
+
+  // [v11] ===== SCROLL-LOCK iOS + TRAP DE FOCO (acessibilidade premium) =====
+  var scrollLockY = 0;
+  var lastFocused = null;
+
+  function lockBody() {
+    scrollLockY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-scrollLockY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+  }
+  function unlockBody() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    document.body.style.overflow = '';
+    window.scrollTo(0, scrollLockY);
+  }
+  function focusableEls() {
+    return Array.prototype.slice.call(
+      modal.querySelectorAll('button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')
+    ).filter(function(el) { return el.offsetParent !== null; });
+  }
+  function focusModal() {
+    lastFocused = document.activeElement;
+    setTimeout(function() {
+      var target = (emailInput && emailInput.offsetParent !== null) ? emailInput : (focusableEls()[0] || closeBtn);
+      if (target && target.focus) { try { target.focus({ preventScroll: true }); } catch (e) { try { target.focus(); } catch (e2) {} } }
+    }, 80);
+  }
+  function restoreFocus() {
+    if (lastFocused && lastFocused.focus) { try { lastFocused.focus({ preventScroll: true }); } catch (e) {} }
+    lastFocused = null;
+  }
+
+  // desbloqueia o áudio no primeiríssimo gesto do visitante (regra dos navegadores)
+  (function() {
+    if (!soundEnabled) return;
+    function unlock() {
+      var ctx = getAudioContext();
+      if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+      ['pointerdown','touchstart','keydown','click'].forEach(function(ev) {
+        document.removeEventListener(ev, unlock, true);
+      });
+    }
+    ['pointerdown','touchstart','keydown','click'].forEach(function(ev) {
+      document.addEventListener(ev, unlock, true);
+    });
+  })();
+  var audioContext = null;
+  var winPlayed = false;
+  var audioTimeouts = [];
+  var scheduledOscillators = [];
+
+  function scheduleAudio(fn, delay) {
+    var id = setTimeout(function() {
+      var idx = audioTimeouts.indexOf(id);
+      if (idx > -1) audioTimeouts.splice(idx, 1);
+      if (overlay.classList.contains('is-open') && soundEnabled) fn();
+    }, delay);
+    audioTimeouts.push(id);
+    return id;
+  }
+  function cancelAllAudio() {
+    audioTimeouts.forEach(function(id) { clearTimeout(id); });
+    audioTimeouts = [];
+    scheduledOscillators.forEach(function(osc) { try { osc.stop(0); osc.disconnect(); } catch (e) {} });
+    scheduledOscillators = [];
+    if (audioContext && audioContext.state === 'running') { try { audioContext.suspend(); } catch (e) {} }
+  }
+  function resumeAudio() {
+    if (audioContext && audioContext.state === 'suspended') { try { audioContext.resume(); } catch (e) {} }
+  }
+  function getAudioContext() {
+    if (!soundEnabled) return null;
+    if (audioContext) return audioContext;
+    try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+    return audioContext;
+  }
+  function playTickNow() {
+    if (!soundEnabled) return;
+    var ctx = getAudioContext();
+    if (!ctx || ctx.state !== 'running') return;
+    try {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 1100;
+      gain.gain.setValueAtTime(0.03, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.022);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(); osc.stop(ctx.currentTime + 0.022);
+      scheduledOscillators.push(osc);
+      setTimeout(function() {
+        var idx = scheduledOscillators.indexOf(osc);
+        if (idx > -1) scheduledOscillators.splice(idx, 1);
+      }, 50);
+    } catch (e) {}
+  }
+  function bezier(t, p1x, p1y, p2x, p2y) {
+    var cx = 3 * p1x, bx = 3 * (p2x - p1x) - cx, ax = 1 - cx - bx;
+    var cy = 3 * p1y, by = 3 * (p2y - p1y) - cy, ay = 1 - cy - by;
+    var x = t;
+    for (var i = 0; i < 8; i++) {
+      var currentX = ((ax * x + bx) * x + cx) * x - t;
+      if (Math.abs(currentX) < 0.001) break;
+      var currentSlope = (3 * ax * x + 2 * bx) * x + cx;
+      if (Math.abs(currentSlope) < 0.000001) break;
+      x = x - currentX / currentSlope;
+    }
+    return ((ay * x + by) * x + cy) * x;
+  }
+  function inverseEasing(targetY) {
+    var lo = 0, hi = 1, mid;
+    for (var i = 0; i < 20; i++) {
+      mid = (lo + hi) / 2;
+      var y = bezier(mid, 0.17, 0.67, 0.16, 1);
+      if (Math.abs(y - targetY) < 0.001) return mid;
+      if (y < targetY) lo = mid; else hi = mid;
+    }
+    return mid;
+  }
+  function scheduleSyncedTicks(totalRotation, durationMs) {
+    if (!soundEnabled) return;
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+    var DEGREES_PER_TICK = 30;
+    var totalTicks = Math.floor(totalRotation / DEGREES_PER_TICK);
+    if (totalTicks > 60) totalTicks = 60;
+    for (var i = 1; i <= totalTicks; i++) {
+      var targetRotation = i * DEGREES_PER_TICK;
+      var progress = targetRotation / totalRotation;
+      var time = inverseEasing(progress);
+      var delayMs = time * durationMs;
+      if (delayMs > durationMs - 80) continue;
+      scheduleAudio(playTickNow, delayMs);
+    }
+  }
+  function playNote(ctx, freq, start, dur, type, vol) {
+    try {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = type || 'triangle';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(vol || 0.12, start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(start); osc.stop(start + dur + 0.05);
+      scheduledOscillators.push(osc);
+      setTimeout(function() {
+        var idx = scheduledOscillators.indexOf(osc);
+        if (idx > -1) scheduledOscillators.splice(idx, 1);
+      }, (start - ctx.currentTime + dur) * 1000 + 120);
+    } catch (e) {}
+  }
+  // ====== CHIME DE VITÓRIA (premium · suave) — substitui o forró chiptune ======
+  function playWin() {
+    if (!soundEnabled || winPlayed) return;
+    winPlayed = true;
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+    var t0 = ctx.currentTime + 0.04;
+    // três notas ascendentes com cauda longa (Sol–Si–Ré–Sol↑) — sino quente de sanfona
+    var notes = [392.00, 493.88, 587.33, 783.99];
+    notes.forEach(function(f, i) {
+      playNote(ctx, f, t0 + i * 0.13, 0.95, 'triangle', i === 3 ? 0.13 : 0.10);
+    });
+    // brilho agudo discreto
+    playNote(ctx, 1174.66, t0 + 0.42, 0.6, 'sine', 0.045);
+    // base quente curtíssima (corpo de festa, sem peso)
+    playNote(ctx, 196.00, t0, 0.7, 'sawtooth', 0.028);
+  }
+  function hapticFeedback(p) { if ('vibrate' in navigator) try { navigator.vibrate(p); } catch (e) {} }
+
+  function hasActiveCoupon() {
+    var exp = ls(KEYS.couponExp);
+    return exp && parseInt(exp, 10) > Date.now();
+  }
+  function canShow() {
+    if (hasActiveCoupon()) return false;
+    if (ss(KEYS.sessionShown)) return false;
+    return true;
+  }
+
+  function openRoleta(reason) {
+    if (!canShow() || hasOpened) return;
+    hasOpened = true;
+    triggerSource = reason || 'unknown';
+    if (ls(KEYS.closed) && eyebrow && subtitle) {
+      eyebrow.textContent = 'Você voltou pra festa';
+      subtitle.textContent = 'Vimos que você voltou ao arraiá. Sua chance especial continua de pé.';
+    }
+    if (emailInput && ls(KEYS.leadEmail)) emailInput.value = ls(KEYS.leadEmail);
+    if (phoneInput && ls(KEYS.leadPhone)) phoneInput.value = ls(KEYS.leadPhone);
+    overlay.classList.add('is-open');
+    lockBody();       // [v11] trava o fundo de verdade (iOS incluso)
+    focusModal();     // [v11] move o foco pra dentro do modal
+    if (teaser) teaser.classList.remove('is-visible');
+    ss(KEYS.sessionShown, '1');
+    track('roleta_opened', { trigger: triggerSource });
+  }
+
+  function closeRoleta() {
+    overlay.classList.remove('is-open');
+    unlockBody();     // [v11]
+    restoreFocus();   // [v11]
+    cancelAllAudio();
+    if (!hasSpun) {
+      ls(KEYS.closed, '1');
+      setTimeout(function() { if (canShow() && teaser) teaser.classList.add('is-visible'); }, 2500);
+    }
+  }
+
+  function showLastChance() {
+    if (ss(KEYS.lastChanceShown)) return;
+    if (!ls(KEYS.closed)) return;
+    if (hasActiveCoupon()) return;
+    if (overlay.classList.contains('is-open')) return;
+
+    ss(KEYS.lastChanceShown, '1');
+    var coupon = CFG.coupons.gift;
+    var expiresAt = Date.now() + (10 * 60 * 1000);
+    ls(KEYS.coupon, coupon.code);
+    ls(KEYS.couponExp, String(expiresAt));
+    currentCoupon = coupon;
+
+    spinScreen.classList.remove('is-active');
+    resultScreen.classList.remove('is-active');
+    lastChanceScreen.classList.add('is-active');
+
+    if (lcCode) lcCode.textContent = coupon.code;
+    if (lcMin) lcMin.textContent = coupon.min > 0 ? 'Pedido mínimo: R$ ' + coupon.min.toFixed(2).replace('.', ',') : 'Sem valor mínimo';
+
+    function updateLc() {
+      var remaining = expiresAt - Date.now();
+      if (remaining <= 0) { if (lcTimer) lcTimer.textContent = 'EXPIRADO'; clearInterval(lcInterval); return; }
+      var mins = Math.floor(remaining / 60000);
+      var secs = Math.floor((remaining % 60000) / 1000);
+      if (lcTimer) lcTimer.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+    updateLc();
+    lcInterval = setInterval(updateLc, 1000);
+
+    overlay.classList.add('is-open');
+    lockBody();       // [v11]
+    focusModal();     // [v11]
+    hasOpened = true;
+    hasSpun = true;
+
+    fireSophisticatedConfetti();
+    hapticFeedback([100, 50, 200]);
+    playWin();
+    track('roleta_won', { prize: 'gift', via: 'last_chance', trigger: triggerSource });
+  }
+
+  if (CFG.isHome) setTimeout(function() { openRoleta('home_delay'); }, CFG.homeDelay);
+  if (CFG.isProduct) {
+    var lastTouch = Date.now();
+    ['click', 'touchstart', 'scroll', 'keydown'].forEach(function(ev) {
+      document.addEventListener(ev, function() { lastTouch = Date.now(); }, { passive: true });
+    });
+    setTimeout(function() {
+      if (Date.now() - lastTouch >= CFG.productDelay - 2000) openRoleta('product_idle');
+    }, CFG.productDelay);
+    setTimeout(function() { openRoleta('product_fallback'); }, CFG.productDelay * 2);
+  }
+
+  var exitFired = false;
+  document.addEventListener('mouseout', function(e) {
+    if (exitFired) return;
+    if (e.clientY <= 0 && !e.relatedTarget && !e.toElement) {
+      exitFired = true;
+      if (!hasOpened) openRoleta('exit_desktop');
+      else if (!hasSpun) showLastChance();
+    }
+  });
+
+  var lastScrollY = window.scrollY || 0;
+  var lastScrollTime = Date.now();
+  var scrollVelocityTriggered = false;
+  document.addEventListener('scroll', function() {
+    if (scrollVelocityTriggered) return;
+    var now = Date.now();
+    var dy = (window.scrollY || 0) - lastScrollY;
+    var dt = now - lastScrollTime;
+    if (dt > 0) {
+      var velocity = Math.abs(dy) / dt;
+      if (dy < -50 && velocity > 1.5 && window.scrollY < 200) {
+        scrollVelocityTriggered = true;
+        if (!hasOpened) openRoleta('exit_mobile_scroll');
+        else if (!hasSpun && ls(KEYS.closed)) showLastChance();
+      }
+    }
+    lastScrollY = window.scrollY || 0;
+    lastScrollTime = now;
+  }, { passive: true });
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') {
+      ls('gr_hidden_at', String(Date.now()));
+      cancelAllAudio();
+    } else if (document.visibilityState === 'visible') {
+      var hiddenAt = parseInt(ls('gr_hidden_at') || '0', 10);
+      var awayTime = Date.now() - hiddenAt;
+      if (awayTime > 5000 && ls(KEYS.closed) && !hasActiveCoupon() && !ss(KEYS.lastChanceShown)) {
+        setTimeout(showLastChance, 600);
+      } else if (!hasOpened && ls(KEYS.closed)) {
+        setTimeout(function() { openRoleta('return_tab'); }, 800);
+      }
+    }
+  });
+  window.addEventListener('beforeunload', function() {
+    cancelAllAudio();
+    if (!hasSpun && hasOpened) ls(KEYS.closed, '1');
+  });
+  window.addEventListener('pagehide', cancelAllAudio);
+
+  if (!CFG.isHome && !CFG.isProduct) setTimeout(function() { openRoleta('time_fallback'); }, 30000);
+
+  function getPrizes() {
+    var isFirstTime = !ls(KEYS.firstSpin);
+    if (isFirstTime) {
+      return [
+        { key: 'd10',  segment: 0, weight: 80 },
+        { key: 'd5',   segment: 1, weight: 6  },
+        { key: 'd15',  segment: 2, weight: 5  },
+        { key: 'gift', segment: 3, weight: 4  },
+        { key: 'd20',  segment: 4, weight: 5  }
+      ];
+    }
+    return [
+      { key: 'd10',  segment: 0, weight: 70 },
+      { key: 'd5',   segment: 1, weight: 8  },
+      { key: 'd15',  segment: 2, weight: 8  },
+      { key: 'gift', segment: 3, weight: 6  },
+      { key: 'd20',  segment: 4, weight: 8  }
+    ];
+  }
+  function pickPrize() {
+    var prizes = getPrizes();
+    var total = prizes.reduce(function(s, p) { return s + p.weight; }, 0);
+    var r = Math.random() * total;
+    var acc = 0;
+    for (var i = 0; i < prizes.length; i++) {
+      acc += prizes[i].weight;
+      if (r <= acc) return prizes[i];
+    }
+    return prizes[0];
+  }
+  function validEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+  function validPhone(p) { var d = p.replace(/\D/g, ''); return d.length >= 10 && d.length <= 13; }
+
+  function captureAndSpin() {
+    if (CFG.captureLead) {
+      var email = emailInput ? emailInput.value.trim() : '';
+      if (!validEmail(email)) {
+        if (emailInput) { emailInput.classList.add('error'); emailInput.focus(); }
+        hapticFeedback(50);
+        return;
+      }
+      ls(KEYS.leadEmail, email);
+      var phone = phoneInput ? phoneInput.value.trim() : '';
+      if (phone && validPhone(phone)) ls(KEYS.leadPhone, phone);
+      track('Lead', { email: email, phone: phone, trigger: triggerSource });
+      track('roleta_lead_captured', { trigger: triggerSource });
+      sendLeadWebhook(email, phone);
+    }
+    spin();
+  }
+
+  function sendLeadWebhook(email, phone) {
+    var url = {{ section.settings.lead_webhook | default: '' | json }};
+    if (!url) return;
+    try {
+      fetch(url, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email, phone: phone, source: 'roleta',
+          trigger: triggerSource, page: window.location.href,
+          ts: new Date().toISOString()
+        })
+      });
+    } catch (e) {}
+  }
+
+  function spin() {
+    if (hasSpun) return;
+    hasSpun = true;
+    winPlayed = false;
+    spinBtn.disabled = true;
+    spinBtn.classList.add('is-spinning');
+    spinBtn.textContent = 'GIRANDO';
+    if (hint) hint.style.opacity = '0';
+    cancelAllAudio();
+    resumeAudio();
+    hapticFeedback(30);
+
+    var prize = pickPrize();
+    var segSize = 72;
+    var segCenter = prize.segment * segSize;
+    // margem apertada (0.34) → ponteiro nunca cruza a borda visual do segmento
+    var noise = (Math.random() - 0.5) * (segSize * 0.34);
+    var fullSpins = 6;
+    var totalRotation = (fullSpins * 360) - segCenter + noise;
+
+    wheel.style.transform = 'rotate(' + totalRotation + 'deg)';
+    scheduleSyncedTicks(Math.abs(totalRotation), SPIN_MS); // [v11] usa SPIN_MS
+
+    track('roleta_spun', { prize: prize.key, trigger: triggerSource });
+    ls(KEYS.firstSpin, '1');
+
+    setTimeout(function() {                                 // [v11] resultado quando a roda PARA
+      if (!overlay.classList.contains('is-open')) return;
+      showResult(prize);
+    }, SPIN_MS + 100);
+  }
+
+  function showResult(prize) {
+    var coupon = CFG.coupons[prize.key];
+    var expiresAt = Date.now() + (CFG.couponMinutes * 60 * 1000);
+
+    ls(KEYS.coupon, coupon.code);
+    ls(KEYS.couponExp, String(expiresAt));
+    currentCoupon = coupon;
+
+    spinScreen.classList.remove('is-active');
+    resultScreen.classList.add('is-active');
+
+    if (prize.key === 'gift') {
+      resultScreen.classList.add('gr-gift');
+      resultTitle.textContent = 'Brinde do Arraiá';
+      resultPrize.textContent = CFG.giftText;
+      resultIcon.innerHTML = SVG_GIFT;
+    } else {
+      resultScreen.classList.remove('gr-gift');
+      var pct = prize.key.replace('d', '');
+      resultTitle.textContent = pct + '% OFF';
+      resultPrize.textContent = 'Você caiu na quadrilha das ofertas!';
+      resultIcon.innerHTML = SVG_SPARK;
+    }
+
+    couponCode.textContent = coupon.code;
+    if (couponMin) couponMin.textContent = coupon.min > 0 ? 'Pedido mínimo: R$ ' + coupon.min.toFixed(2).replace('.', ',') : 'Sem valor mínimo · use no checkout';
+
+    if (socialText) {
+      var n = Math.floor(Math.random() * (CFG.socialProofMax - CFG.socialProofMin + 1)) + CFG.socialProofMin;
+      socialText.textContent = n + ' pessoas resgataram no arraiá hoje';
+    }
+
+    // [v11] após trocar de tela, leva o foco pro botão de resgate (continuidade de teclado)
+    if (claimBtn) setTimeout(function() { try { claimBtn.focus({ preventScroll: true }); } catch (e) {} }, 120);
+
+    function updateTimer() {
+      var remaining = expiresAt - Date.now();
+      if (remaining <= 0) {
+        timerDisplay.textContent = 'EXPIRADO';
+        timerWrap.classList.add('expired');
+        clearInterval(timerInterval);
+        return;
+      }
+      var mins = Math.floor(remaining / 60000);
+      var secs = Math.floor((remaining % 60000) / 1000);
+      timerDisplay.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+
+    fireSophisticatedConfetti();
+    hapticFeedback([100, 50, 200, 50, 300]);
+    playWin();
+    track('roleta_won', { prize: prize.key, coupon_code: coupon.code, trigger: triggerSource });
+  }
+
+  // ====== CONFETE EDITORIAL (bandeirinhas + pontos na paleta · sem emoji) ======
+  var CONFETTI_COLORS = ['#b3522d', '#bfa05f', '#8a9663', '#854a63', '#e3cf9f', '#efe2c8'];
+
+  function makeShape(color, size) {
+    var div = document.createElement('div');
+    div.className = 'gr-confetti-shape';
+    div.style.setProperty('--c', color);
+    if (Math.random() > 0.45) {
+      div.classList.add('gr-cf-flag');
+      var s = size / 12;
+      div.style.transform = 'scale(' + s.toFixed(2) + ')';
+    } else {
+      div.classList.add('gr-cf-dot');
+      div.style.width = (size * 0.6) + 'px';
+      div.style.height = (size * 0.6) + 'px';
+    }
+    return div;
+  }
+
+  function fireSophisticatedConfetti() {
+    if (!confettiWrap || prefersReducedMotion) return;
+    for (var i = 0; i < 28; i++) {
+      var color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      var size = 12 + Math.random() * 12;
+      var el = makeShape(color, size);
+      el.classList.add('burst');
+      var angle = (Math.PI * 2 * i) / 28 + (Math.random() - 0.5) * 0.4;
+      var distance = 150 + Math.random() * 220;
+      el.style.setProperty('--bx', Math.cos(angle) * distance + 'px');
+      el.style.setProperty('--by', Math.sin(angle) * distance - 80 + 'px');
+      el.style.setProperty('--br', (Math.random() * 1080 - 540) + 'deg');
+      el.style.animationDelay = (Math.random() * 0.2) + 's';
+      confettiWrap.appendChild(el);
+      (function(e) { setTimeout(function() { e.remove(); }, 2200); })(el);
+    }
+    setTimeout(function() {
+      for (var j = 0; j < 54; j++) {
+        var color2 = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+        var size2 = 10 + Math.random() * 12;
+        var el2 = makeShape(color2, size2);
+        el2.classList.add('fall');
+        if (Math.random() > 0.5) el2.classList.add('sway');
+        el2.style.left = (Math.random() * 100) + '%';
+        el2.style.setProperty('--dx', ((Math.random() - 0.5) * 300) + 'px');
+        el2.style.setProperty('--rot', (Math.random() * 1080) + 'deg');
+        el2.style.setProperty('--dur', (3.6 + Math.random() * 2.4) + 's');
+        el2.style.animationDelay = (Math.random() * 1.4) + 's';
+        confettiWrap.appendChild(el2);
+        (function(e) { setTimeout(function() { e.remove(); }, 7500); })(el2);
+      }
+    }, 200);
+  }
+
+  // ====== CLAIM — REDIRECIONA COM UTMs PRA UTMIFY (igual v8/v9/v10) ======
+  function claimCoupon() {
+    if (!currentCoupon) return;
+    var code = currentCoupon.code;
+    var btn = this;
+
+    var doNext = function() {
+      track('roleta_coupon_copied', { code: code, trigger: triggerSource });
+      hapticFeedback(80);
+      cancelAllAudio();
+
+      var utmString = buildUtmString(code, triggerSource);
+
+      if (CFG.isProduct) {
+        try {
+          var currentUrl = new URL(window.location.href);
+          var utms = buildUtmifyParams(code, triggerSource);
+          Object.keys(utms).forEach(function(k) { currentUrl.searchParams.set(k, utms[k]); });
+          history.replaceState(null, '', currentUrl.toString());
+        } catch (e) {}
+
+        btn.textContent = 'Copiado! Use no checkout';
+        btn.disabled = true;
+        setTimeout(function() {
+          overlay.classList.remove('is-open');
+          unlockBody();    // [v11]
+          restoreFocus();  // [v11]
+        }, 1100);
+      } else {
+        btn.textContent = 'Copiado! Indo pra festa...';
+        btn.disabled = true;
+        var sep = CFG.redirectUrl.indexOf('?') > -1 ? '&' : '?';
+        var finalRedirect = CFG.redirectUrl + sep + utmString;
+        var url = '/discount/' + encodeURIComponent(code) + '?redirect=' + encodeURIComponent(finalRedirect);
+        setTimeout(function() {
+          overlay.classList.remove('is-open');
+          unlockBody();    // [v11]
+          setTimeout(function() { window.location.href = url; }, 300);
+        }, 700);
+      }
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(doNext).catch(function() { fallbackCopy(code); doNext(); });
+    } else { fallbackCopy(code); doNext(); }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  if (spinBtn) spinBtn.addEventListener('click', captureAndSpin);
+  if (emailInput) emailInput.addEventListener('input', function() { this.classList.remove('error'); });
+  if (closeBtn) closeBtn.addEventListener('click', closeRoleta);
+  if (overlay) overlay.addEventListener('click', function(e) { if (e.target === overlay) closeRoleta(); });
+  document.addEventListener('keydown', function(e) {
+    if (!overlay.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { closeRoleta(); return; }
+    // [v11] trap de Tab: o foco circula só dentro do modal
+    if (e.key === 'Tab') {
+      var els = focusableEls();
+      if (!els.length) return;
+      var first = els[0], last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  if (claimBtn) claimBtn.addEventListener('click', claimCoupon);
+  if (lcClaim) lcClaim.addEventListener('click', claimCoupon);
+  if (teaser) teaser.addEventListener('click', function() {
+    teaser.classList.remove('is-visible');
+    hasOpened = false;
+    ss(KEYS.sessionShown, null);
+    openRoleta('teaser_click');
+  });
+
+})();
+</script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Roleta Arraiá v11",
+  "tag": "section",
+  "class": "section-roleta-arraia",
+  "settings": [
+    { "type": "header", "content": "Ativação" },
+    { "type": "checkbox", "id": "enabled", "label": "Ativar Roleta", "default": true },
+    { "type": "checkbox", "id": "music_enabled", "label": "Som / chime de vitória", "default": true, "info": "Tick suave no giro + chime na vitória. Desligue se preferir 100% silencioso." },
+
+    { "type": "header", "content": "Captura de Lead" },
+    { "type": "checkbox", "id": "capture_lead", "label": "Exigir e-mail antes do giro", "default": true },
+    { "type": "checkbox", "id": "capture_whatsapp", "label": "Capturar também WhatsApp", "default": true },
+    { "type": "url", "id": "lead_webhook", "label": "Webhook para LEADS (opcional)", "info": "URL pra enviar leads ao CRM/WhatsApp (Zapier/Make). Vendas vão direto pra Utmify via UTMs." },
+
+    { "type": "header", "content": "Textos (Arraiá)" },
+    { "type": "text", "id": "eyebrow_text", "label": "Texto superior", "default": "Arraiá da Graça" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Gire a roleta do São João" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "Deixe seu contato e toque na fogueira para girar. A festa tem oferta pra você." },
+    { "type": "text", "id": "teaser_text", "label": "Teaser flutuante", "default": "Seu arraiá te espera" },
+    { "type": "text", "id": "gift_text", "label": "Mensagem do brinde", "default": "Brinde junino garantido no seu pedido" },
+
+    { "type": "header", "content": "Prova Social" },
+    { "type": "number", "id": "social_proof_min", "label": "Mínimo (pessoas)", "default": 8 },
+    { "type": "number", "id": "social_proof_max", "label": "Máximo (pessoas)", "default": 24 },
+
+    { "type": "header", "content": "Redirecionamento (Home/Coleção)" },
+    { "type": "text", "id": "redirect_url", "label": "URL após copiar", "default": "/collections/all", "info": "Dica de arraiá: aponte para a coleção 'Look de Arraiá' (ex: /collections/look-de-arraia) com o Macacão Alenice em destaque." },
+
+    { "type": "header", "content": "Tempos" },
+    { "type": "range", "id": "home_delay", "label": "Home (s)", "min": 1, "max": 30, "step": 1, "default": 3, "unit": "s" },
+    { "type": "range", "id": "product_delay", "label": "Produto (s)", "min": 10, "max": 180, "step": 5, "default": 60, "unit": "s" },
+    { "type": "range", "id": "coupon_minutes", "label": "Validade (min)", "min": 5, "max": 60, "step": 1, "default": 15, "unit": "min" },
+
+    { "type": "header", "content": "Códigos do Checkout Zedy" },
+    { "type": "text", "id": "code_5",    "label": "Código 5% OFF",  "default": "FOGUEIRA5" },
+    { "type": "text", "id": "code_10",   "label": "Código 10% OFF", "default": "ARRAIA10" },
+    { "type": "text", "id": "code_15",   "label": "Código 15% OFF", "default": "SAOJOAO15" },
+    { "type": "text", "id": "code_20",   "label": "Código 20% OFF", "default": "QUADRILHA20" },
+    { "type": "text", "id": "code_gift", "label": "Código Brinde",  "default": "BRINDEJUNINO" },
+
+    { "type": "header", "content": "Mínimos (R$) — deixe 0 para sem mínimo" },
+    { "type": "number", "id": "min_5",    "label": "Mínimo 5%",  "default": 0 },
+    { "type": "number", "id": "min_10",   "label": "Mínimo 10%", "default": 0 },
+    { "type": "number", "id": "min_15",   "label": "Mínimo 15%", "default": 0 },
+    { "type": "number", "id": "min_20",   "label": "Mínimo 20%", "default": 0 },
+    { "type": "number", "id": "min_gift", "label": "Mínimo Brinde", "default": 0 }
+  ],
+  "presets": [ { "name": "Roleta Arraiá v11" } ]
+}
+{% endschema %}
