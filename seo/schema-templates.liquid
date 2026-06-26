@@ -1,0 +1,57 @@
+{%- comment -%}
+  Grassa Boutique — Templates JSON-LD para SEO + GEO
+  Onde colar:
+    - Product + BreadcrumbList -> sections/main-product.liquid
+    - Organization -> layout/theme.liquid (UMA vez, antes de </head>)
+  ANTES de colar Product: confira se o tema já injeta schema Product.
+  Se já injetar, complete brand/sku no bloco existente em vez de duplicar.
+  availability deriva do estoque real (product.available) — honesto.
+  aggregateRating omitido de propósito: só com review real.
+{%- endcomment -%}
+
+{%- comment -%} ===== PRODUCT (PDP) ===== {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": {{ product.featured_image | image_url: width: 1200 | prepend: "https:" | json }},
+  "description": {{ product.description | strip_html | truncate: 320 | json }},
+  "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+  "sku": {{ product.selected_or_first_available_variant.sku | json }},
+  "offers": {
+    "@type": "Offer",
+    "url": {{ shop.url | append: product.url | json }},
+    "price": "{{ product.price | divided_by: 100.0 }}",
+    "priceCurrency": {{ shop.currency | json }},
+    "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "itemCondition": "https://schema.org/NewCondition"
+  }
+}
+</script>
+
+{%- comment -%} ===== BREADCRUMBLIST (PDP) ===== {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Início", "item": {{ shop.url | json }} },
+    {% if collection %}{ "@type": "ListItem", "position": 2, "name": {{ collection.title | json }}, "item": {{ shop.url | append: collection.url | json }} },{% endif %}
+    { "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+  ]
+}
+</script>
+
+{%- comment -%} ===== ORGANIZATION (theme.liquid, uma vez) ===== {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Grassa Boutique",
+  "url": "https://grassaboutique.shop",
+  "logo": "https://grassaboutique.shop/[CAMINHO-DO-LOGO].png",
+  "description": "Moda feminina elegante para mulheres 40+ — conjuntos, macacões e peças atemporais.",
+  "sameAs": ["[URL-INSTAGRAM]", "[URL-FACEBOOK]"]
+}
+</script>
