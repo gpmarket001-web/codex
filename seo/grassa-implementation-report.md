@@ -21,12 +21,17 @@ não propagar erro:
 | Meta do herói | "CSS cru" a corrigir | **já estava limpa e otimizada** (sessão anterior) |
 | Estoque | implícito disponível | **0 em toda a loja** (`tracksInventory: true`) |
 
-> ⚠️ **Achado comercial crítico (fora de SEO):** todos os produtos auditados estão com
-> `totalInventory: 0` e `inventoryPolicy: DENY`. Ou seja: a loja **não vende** no estado
-> atual, e claims de "Últimas peças"/`InStock` são tecnicamente falsos hoje. Repor estoque
-> (ou ajustar a narrativa) é pré-requisito para qualquer ganho de SEO/CRO virar receita.
-> Por integridade, **nenhum schema InStock fixo foi escrito no catálogo** — o template
-> abaixo deriva disponibilidade do estoque real.
+> ⚠️ **Achado comercial (na auditoria):** todos os produtos estavam com `totalInventory: 0`
+> e `inventoryPolicy: DENY` — a loja **não vendia** nesse estado.
+>
+> ✅ **RESOLVIDO (2026-06-26, a pedido do lojista):** rastreio de estoque **desativado**
+> (`inventoryItem.tracked = false`) em **todas as 1393 variantes dos 50 produtos**. Agora
+> `availableForSale = true` em todo o catálogo — todos disponíveis para compra, sem controle
+> de quantidade. Confirmado via API (`tracksInventory: false`). Se um dia quiser voltar a
+> controlar estoque, basta reativar o rastreio por variante.
+>
+> Como o template de schema deriva `availability` de `product.available`, agora ele emite
+> `InStock` de forma **verdadeira** (a peça está de fato disponível). Nenhum dado fabricado.
 
 ---
 
@@ -95,8 +100,9 @@ na mesma página confundem o Google.
 }
 </script>
 ```
-- `availability` segue o **estoque real** → enquanto a loja estiver zerada, sai `OutOfStock`
-  (honesto). Quando repor, vira `InStock` sozinho.
+- `availability` segue o estoque/disponibilidade real via `product.available`. Com o rastreio
+  desativado (ver seção 0), todas as PDPs emitem `InStock` — verdadeiro, pois estão de fato
+  disponíveis para compra.
 - `aggregateRating` **propositalmente ausente** — só adicionar com review real (Judge.me/
   Reportana). Estrela fabricada = penalização Google + quebra de marca.
 
@@ -174,4 +180,5 @@ imagens sem alt. Prioridade por categoria/tráfego:
 - `seo/schema-templates.liquid` — os 3 blocos JSON-LD prontos.
 - `seo/grassa-implementation-report.md` — este documento.
 - (loja viva) 7 metas + 15 alts aplicados via API — registrado na seção 1.
+- (loja viva) rastreio de estoque desativado nas 1393 variantes → catálogo todo disponível (seção 0).
 - Repo `gra-a`, mesmo branch: on-page da LP Alenice (title/meta/OG/JSON-LD).
